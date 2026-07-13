@@ -4,9 +4,8 @@ import { useInView } from 'react-intersection-observer'
 import { Download, Link2, Mail, MapPin, MessageCircle } from 'lucide-react'
 import SectionTitle from '../ui/SectionTitle'
 import { cvData } from '../../data/cv-data'
+import { downloadCvPdf } from '../../lib/downloadCv'
 import profilePhoto from '../../assets/profile.png'
-
-const CV_PDF_URL = `${import.meta.env.BASE_URL}HtinLin_Aung_CV.pdf`
 
 const SKILLS = [
   'Flutter & Dart',
@@ -23,11 +22,7 @@ const STRENGTHS = [
   'Problem-solving mindset',
 ]
 
-const HOBBIES = [
-  'Exploring new frameworks',
-  'Game design & Unity',
-  'Tech & startup content',
-]
+const HOBBIES = ['Exploring new frameworks', 'Game design & Unity', 'Tech & startup content']
 
 const SUMMARY =
   'Final-year ICT student with hands-on experience designing, building, and independently deploying full-stack mobile and web applications used by real businesses. Comfortable owning a project end-to-end — database schema, backend logic, UI, and production deployment — using Flutter, React, Next.js, and Supabase. Seeking a software development internship in Bangkok or remote.'
@@ -186,9 +181,7 @@ function ResumeCard() {
             <p className="mt-1 text-sm text-gray-700">
               B.Sc. Information &amp; Communication Technology
             </p>
-            <p className="mt-1 text-xs text-gray-500">
-              Final-Year · Bangkok · Expected 2027
-            </p>
+            <p className="mt-1 text-xs text-gray-500">Final-Year · Bangkok · Expected 2027</p>
           </section>
         </aside>
 
@@ -217,8 +210,8 @@ function ResumeCard() {
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <span className="shrink-0">•</span>
                     <span>
-                      Managed full project lifecycle independently — requirements through
-                      deployment — for small businesses and non-profits in Myanmar.
+                      Managed full project lifecycle independently — requirements through deployment
+                      — for small businesses and non-profits in Myanmar.
                     </span>
                   </li>
                 </ul>
@@ -284,13 +277,7 @@ export default function CV() {
   })
 
   const handleDownload = () => {
-    const link = document.createElement('a')
-    link.href = CV_PDF_URL
-    link.download = 'HtinLin_Aung_CV.pdf'
-    link.rel = 'noopener noreferrer'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    downloadCvPdf()
     setShowToast(true)
   }
 

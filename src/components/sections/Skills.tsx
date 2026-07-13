@@ -162,10 +162,7 @@ export default function Skills() {
     <section id="skills" className="section-padding relative z-[1]">
       <div className="section-container relative z-10">
         <SkillsIntro />
-        <SectionTitle
-          title="Technical Skills"
-          subtitle="Technologies I work with"
-        />
+        <SectionTitle title="Technical Skills" subtitle="Technologies I work with" />
 
         <MobileSkillCloud />
 

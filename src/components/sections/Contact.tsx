@@ -2,15 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import {
-  Check,
-  Github,
-  Linkedin,
-  Loader2,
-  Mail,
-  MessageCircle,
-  Send,
-} from 'lucide-react'
+import { Check, Github, Linkedin, Loader2, Mail, MessageCircle, Send } from 'lucide-react'
 import clsx from 'clsx'
 import SectionTitle from '../ui/SectionTitle'
 import { cvData } from '../../data/cv-data'
@@ -252,9 +244,7 @@ function ContactForm() {
     if (!validate()) return
 
     if (!isEmailJsConfigured()) {
-      setSubmitError(
-        'Email service is not configured yet. Add your EmailJS keys to the .env file.',
-      )
+      setSubmitError('Email service is not configured yet. Add your EmailJS keys to the .env file.')
       return
     }
 
@@ -283,7 +273,6 @@ function ContactForm() {
       setErrors({})
       setSuccess(true)
     } catch (error) {
-      console.error('EmailJS error:', error)
       setSubmitError(getEmailJsErrorMessage(error))
     } finally {
       setLoading(false)
@@ -366,9 +355,7 @@ function ContactForm() {
                 placeholder="John Doe"
                 className={inputClass('name')}
               />
-              {errors.name && (
-                <p className="mt-1 text-xs text-red-500">{errors.name}</p>
-              )}
+              {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
             </div>
 
             <div>
@@ -384,13 +371,14 @@ function ContactForm() {
                 placeholder="john@example.com"
                 className={inputClass('email')}
               />
-              {errors.email && (
-                <p className="mt-1 text-xs text-red-500">{errors.email}</p>
-              )}
+              {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
             </div>
 
             <div>
-              <label htmlFor="contact-subject" className="mb-1.5 block text-[13px] text-theme-muted">
+              <label
+                htmlFor="contact-subject"
+                className="mb-1.5 block text-[13px] text-theme-muted"
+              >
                 Subject
               </label>
               <input
@@ -402,13 +390,14 @@ function ContactForm() {
                 placeholder="Internship Opportunity"
                 className={inputClass('subject')}
               />
-              {errors.subject && (
-                <p className="mt-1 text-xs text-red-500">{errors.subject}</p>
-              )}
+              {errors.subject && <p className="mt-1 text-xs text-red-500">{errors.subject}</p>}
             </div>
 
             <div>
-              <label htmlFor="contact-message" className="mb-1.5 block text-[13px] text-theme-muted">
+              <label
+                htmlFor="contact-message"
+                className="mb-1.5 block text-[13px] text-theme-muted"
+              >
                 Message
               </label>
               <textarea
@@ -420,9 +409,7 @@ function ContactForm() {
                 rows={5}
                 className={clsx(inputClass('message'), 'min-h-[120px] resize-y')}
               />
-              {errors.message && (
-                <p className="mt-1 text-xs text-red-500">{errors.message}</p>
-              )}
+              {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
             </div>
 
             {submitError && (

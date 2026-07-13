@@ -137,8 +137,14 @@ function ProjectPreview({ project }: { project: Project }) {
         preview.panel,
       )}
     >
-      <div className="project-preview-fine-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-      <div className="project-preview-scanlines pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div
+        className="project-preview-fine-grid pointer-events-none absolute inset-0"
+        aria-hidden="true"
+      />
+      <div
+        className="project-preview-scanlines pointer-events-none absolute inset-0"
+        aria-hidden="true"
+      />
       {preview.particles.map((particle, index) => (
         <span
           key={index}
@@ -157,15 +163,9 @@ function ProjectPreview({ project }: { project: Project }) {
 
       <div className="relative z-[1] flex flex-col items-center">
         <div className="relative flex items-center justify-center">
-          <div
-            className={clsx('project-preview-orb', preview.orb)}
-            aria-hidden="true"
-          />
+          <div className={clsx('project-preview-orb', preview.orb)} aria-hidden="true" />
           <span
-            className={clsx(
-              'project-emoji-float relative text-[72px] leading-none',
-              preview.emoji,
-            )}
+            className={clsx('project-emoji-float relative text-[72px] leading-none', preview.emoji)}
             role="img"
             aria-hidden="true"
           >
@@ -265,13 +265,7 @@ function ProjectDetails({ project, index }: { project: Project; index: number })
   )
 }
 
-function FeaturedProjectCard({
-  project,
-  index,
-}: {
-  project: Project
-  index: number
-}) {
+function FeaturedProjectCard({ project, index }: { project: Project; index: number }) {
   const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true })
   const reversed = index % 2 === 1
 
@@ -279,7 +273,11 @@ function FeaturedProjectCard({
     <motion.article
       ref={ref}
       initial={{ opacity: 0, x: reversed ? 80 : -80, scale: 0.95 }}
-      animate={inView ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: reversed ? 80 : -80, scale: 0.95 }}
+      animate={
+        inView
+          ? { opacity: 1, x: 0, scale: 1 }
+          : { opacity: 0, x: reversed ? 80 : -80, scale: 0.95 }
+      }
       transition={{
         duration: 0.7,
         ease: 'easeOut',
@@ -287,10 +285,7 @@ function FeaturedProjectCard({
       }}
       className="project-card glass-card group relative min-h-[400px] overflow-hidden rounded-[20px] p-0 shadow-sm"
     >
-      <div
-        className="project-card-accent absolute bottom-0 left-0 top-0 w-1"
-        aria-hidden="true"
-      />
+      <div className="project-card-accent absolute bottom-0 left-0 top-0 w-1" aria-hidden="true" />
 
       <div
         className={clsx(
@@ -321,14 +316,16 @@ function MoreComingSoon() {
           <div className="relative mx-auto mb-6 flex h-20 w-20 items-center justify-center">
             <span className="project-coming-ring absolute inset-0 rounded-full border-2 border-water-blue/30" />
             <span className="project-coming-spin absolute inset-1 rounded-full border-2 border-transparent border-t-water-cyan border-r-water-blue" />
-            <span className="project-emoji-float text-[48px] leading-none" role="img" aria-hidden="true">
+            <span
+              className="project-emoji-float text-[48px] leading-none"
+              role="img"
+              aria-hidden="true"
+            >
               🚀
             </span>
           </div>
 
-          <h3 className="text-[20px] font-bold text-theme-primary">
-            More Projects Coming Soon
-          </h3>
+          <h3 className="text-[20px] font-bold text-theme-primary">More Projects Coming Soon</h3>
           <p className="mt-2 text-[14px] text-theme-muted">
             Currently building new projects to add here
           </p>
@@ -353,10 +350,7 @@ export default function Projects() {
   return (
     <section id="projects" className="section-padding relative z-[1]">
       <div className="section-container">
-        <SectionTitle
-          title="My Projects"
-          subtitle="Things I have built and deployed"
-        />
+        <SectionTitle title="My Projects" subtitle="Things I have built and deployed" />
 
         <div className="flex flex-col gap-10">
           {featuredProjects.map((project, index) => (

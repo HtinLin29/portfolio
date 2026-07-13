@@ -67,10 +67,7 @@ export default function Navbar() {
                   smooth
                   duration={500}
                   offset={-80}
-                  className={clsx(
-                    'nav-link cursor-pointer',
-                    activeSection === link.to && 'active',
-                  )}
+                  className={clsx('nav-link cursor-pointer', activeSection === link.to && 'active')}
                 >
                   {link.label}
                 </Link>

@@ -30,9 +30,7 @@ export default function GitHubActivity() {
 
     const fetchContributions = async () => {
       try {
-        const response = await fetch(
-          'https://github-contributions-api.jogruber.de/v4/HtinLin29',
-        )
+        const response = await fetch('https://github-contributions-api.jogruber.de/v4/HtinLin29')
         if (!response.ok) return
 
         const data = (await response.json()) as GitHubContributionsResponse
@@ -127,9 +125,7 @@ export default function GitHubActivity() {
           </div>
         </div>
         <p className="mt-3 text-center text-[12px] text-theme-muted">
-          {totalYear > 0
-            ? `${totalYear} contributions in the last year`
-            : 'Contribution activity'}
+          {totalYear > 0 ? `${totalYear} contributions in the last year` : 'Contribution activity'}
         </p>
         <p className="mt-1 text-center text-[11px] text-theme-muted/70 md:hidden">
           Swipe to explore →

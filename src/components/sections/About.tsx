@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import CountUp from '../../lib/countup'
+import { downloadCvPdf } from '../../lib/downloadCv'
 import { Link } from 'react-scroll'
 import { Clock, Download, Folder, Globe, GraduationCap, Layers, MapPin } from 'lucide-react'
 import SectionTitle from '../ui/SectionTitle'
@@ -86,11 +87,7 @@ function StatCard({
     >
       <Icon size={24} className="mb-2 text-water-blue" />
       <p className="font-heading text-[28px] font-bold text-water-blue">
-        {inView ? (
-          <CountUp end={value} duration={2} suffix={suffix} />
-        ) : (
-          `0${suffix}`
-        )}
+        {inView ? <CountUp end={value} duration={2} suffix={suffix} /> : `0${suffix}`}
       </p>
       <p className="mt-1 text-[12px] text-theme-muted">{label}</p>
     </motion.div>
@@ -116,7 +113,7 @@ function BioStatement({ text, index }: { text: string; index: number }) {
 
 export default function About() {
   const handleDownloadCV = useCallback(() => {
-    console.log('downloading CV')
+    downloadCvPdf()
   }, [])
 
   return (
@@ -129,9 +126,7 @@ export default function About() {
             <h3 className="font-heading mt-5 text-center text-[20px] font-bold text-theme-primary">
               {cvData.name}
             </h3>
-            <p className="mt-1 text-center text-[14px] text-water-cyan">
-              {cvData.title}
-            </p>
+            <p className="mt-1 text-center text-[14px] text-water-cyan">{cvData.title}</p>
             <p className="mt-2 flex items-center justify-center gap-1.5 text-[13px] text-theme-muted">
               <MapPin size={14} className="shrink-0 text-water-blue" />
               {cvData.location}

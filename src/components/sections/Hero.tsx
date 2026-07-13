@@ -2,17 +2,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-scroll'
 import Typed from 'typed.js'
-import {
-  ChevronDown,
-  Download,
-  Github,
-  Linkedin,
-  Mail,
-  MessageCircle,
-} from 'lucide-react'
+import { ChevronDown, Download, Github, Linkedin, Mail, MessageCircle } from 'lucide-react'
 import clsx from 'clsx'
 import { cvData } from '../../data/cv-data'
 import { projects } from '../../data/projects'
+import { downloadCvPdf } from '../../lib/downloadCv'
 import profilePhoto from '../../assets/profile.png'
 import TerminalWidget from '../ui/TerminalWidget'
 
@@ -134,6 +128,12 @@ const CODE_LINES: CodeLineData[] = [
   {
     segments: [
       { text: '    "Water Factory 🏭"', className: 'text-[#86EFAC]' },
+      { text: ',', className: 'text-white/60' },
+    ],
+  },
+  {
+    segments: [
+      { text: '    "Portfolio Website 💻"', className: 'text-[#86EFAC]' },
       { text: '', className: 'text-white/60' },
     ],
   },
@@ -308,7 +308,7 @@ function CodeWindow() {
     if (line.hoverKey === 'status' && hoveredLine === 'status') {
       return (
         <>
-          <span className="text-[#67E8F9]">  status</span>
+          <span className="text-[#67E8F9]"> status</span>
           <span className="text-white/60">: </span>
           <span className="code-hire-bounce text-[#86EFAC]">&quot;✅ Hire me!&quot;</span>
           <span className="text-white/60">,</span>
@@ -319,11 +319,9 @@ function CodeWindow() {
     if (line.hoverKey === 'funFact' && hoveredLine === 'funFact') {
       return (
         <>
-          <span className="text-[#67E8F9]">  funFact</span>
+          <span className="text-[#67E8F9]"> funFact</span>
           <span className="text-white/60">: </span>
-          <span className="code-line-glow text-[#86EFAC]">
-            &quot;...and I prove it 🚀&quot;
-          </span>
+          <span className="code-line-glow text-[#86EFAC]">&quot;...and I prove it 🚀&quot;</span>
         </>
       )
     }
@@ -510,7 +508,7 @@ function HeroContent() {
   }, [])
 
   const handleDownloadCV = useCallback(() => {
-    console.log('downloading CV')
+    downloadCvPdf()
   }, [])
 
   return (
@@ -518,8 +516,14 @@ function HeroContent() {
       id="home"
       className="relative z-[1] flex min-h-[100svh] flex-col overflow-hidden bg-transparent pt-0 md:min-h-[100vh] md:pt-[72px]"
     >
-      <div className="hero-orb hero-orb-primary pointer-events-none absolute z-0" aria-hidden="true" />
-      <div className="hero-orb hero-orb-secondary pointer-events-none absolute z-0" aria-hidden="true" />
+      <div
+        className="hero-orb hero-orb-primary pointer-events-none absolute z-0"
+        aria-hidden="true"
+      />
+      <div
+        className="hero-orb hero-orb-secondary pointer-events-none absolute z-0"
+        aria-hidden="true"
+      />
       <div className="hero-glow pointer-events-none absolute inset-0 z-0" aria-hidden="true" />
 
       <div className="section-container relative z-[1] flex flex-1 items-center py-8 md:py-14">
@@ -551,10 +555,7 @@ function HeroContent() {
               className="font-heading text-[40px] font-extrabold leading-[1.05] text-white md:text-[80px]"
               style={{ letterSpacing: '-2px' }}
             >
-              HTIN LIN{' '}
-              <span className="hero-name-gradient-dark">
-                AUNG
-              </span>
+              HTIN LIN <span className="hero-name-gradient-dark">AUNG</span>
             </motion.h1>
 
             <motion.div variants={itemVariants}>
@@ -624,26 +625,14 @@ function HeroContent() {
               transition={{ delay: 0.8, duration: 0.5, ease: 'easeOut' }}
               className="flex items-center gap-3"
             >
-              <SocialLink
-                label="GitHub"
-                href="https://github.com/HtinLin29"
-                icon={Github}
-              />
+              <SocialLink label="GitHub" href="https://github.com/HtinLin29" icon={Github} />
               <SocialLink
                 label="LinkedIn"
                 href="https://linkedin.com/in/htinlin29"
                 icon={Linkedin}
               />
-              <SocialLink
-                label="Email"
-                href="mailto:htinlin.a66@rsu.ac.th"
-                icon={Mail}
-              />
-              <SocialLink
-                label="LINE"
-                icon={MessageCircle}
-                tooltip={`LINE: ${cvData.line}`}
-              />
+              <SocialLink label="Email" href="mailto:htinlin.a66@rsu.ac.th" icon={Mail} />
+              <SocialLink label="LINE" icon={MessageCircle} tooltip={`LINE: ${cvData.line}`} />
             </motion.div>
 
             <motion.div variants={itemVariants}>
@@ -667,8 +656,7 @@ function HeroContent() {
               className="w-full"
             >
               <p className="mb-2 font-mono text-[11px] text-slate-400">
-                Interactive terminal — try{' '}
-                <span className="text-water-cyan">help</span> or{' '}
+                Interactive terminal — try <span className="text-water-cyan">help</span> or{' '}
                 <span className="text-water-cyan">hire</span>
               </p>
               <TerminalWidget />

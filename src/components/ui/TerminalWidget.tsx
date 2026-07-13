@@ -14,7 +14,7 @@ interface TerminalLine {
 }
 
 const WELCOME_LINES = [
-  'Welcome to Htin Lin Aung\'s dev terminal.',
+  "Welcome to Htin Lin Aung's dev terminal.",
   'Type `help` to see available commands.',
 ]
 
@@ -154,8 +154,7 @@ export default function TerminalWidget({
     if (event.key === 'ArrowUp') {
       event.preventDefault()
       if (history.length === 0) return
-      const nextIndex =
-        historyIndex < 0 ? history.length - 1 : Math.max(0, historyIndex - 1)
+      const nextIndex = historyIndex < 0 ? history.length - 1 : Math.max(0, historyIndex - 1)
       setHistoryIndex(nextIndex)
       setInput(history[nextIndex] ?? '')
       return

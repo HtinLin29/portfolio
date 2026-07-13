@@ -182,6 +182,8 @@ function App() {
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
+    // Defer particle mount until after first client paint.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional client-only gate
     setReady(true)
   }, [])
 

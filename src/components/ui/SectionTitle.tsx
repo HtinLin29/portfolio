@@ -32,10 +32,7 @@ export default function SectionTitle({
     >
       {subtitle && (
         <div
-          className={clsx(
-            'mb-3 flex items-center gap-2',
-            align === 'center' && 'justify-center',
-          )}
+          className={clsx('mb-3 flex items-center gap-2', align === 'center' && 'justify-center')}
         >
           <span className="h-px w-10 bg-water-blue" />
           <span className="h-1.5 w-1.5 rounded-full bg-water-cyan" />
@@ -45,7 +42,9 @@ export default function SectionTitle({
         </div>
       )}
 
-      <h2 className="section-title font-heading text-[36px] font-bold text-theme-primary">{title}</h2>
+      <h2 className="section-title font-heading text-[36px] font-bold text-theme-primary">
+        {title}
+      </h2>
 
       <div
         className={clsx(
