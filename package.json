@@ -20,8 +20,6 @@
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "framer-motion": "^12.42.2",
-    "html2canvas": "^1.4.1",
-    "jspdf": "^4.2.1",
     "lucide-react": "^0.469.0",
     "postcss": "^8.5.16",
     "react": "^19.2.7",

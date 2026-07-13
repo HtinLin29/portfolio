@@ -1,321 +1,252 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import html2canvas from 'html2canvas'
-import jsPDF from 'jspdf'
-import {
-  Download,
-  Github,
-  Loader2,
-  Mail,
-  MapPin,
-  MessageCircle,
-} from 'lucide-react'
+import { Download, Link2, Mail, MapPin, MessageCircle } from 'lucide-react'
 import SectionTitle from '../ui/SectionTitle'
 import { cvData } from '../../data/cv-data'
-import { projects } from '../../data/projects'
+import profilePhoto from '../../assets/profile.png'
 
-const CV_SKILL_CATEGORIES = [
-  { label: 'Mobile', skills: ['Flutter', 'Dart', 'React Native', 'Expo'] },
-  { label: 'Frontend', skills: ['React', 'Next.js', 'TailwindCSS', 'HTML', 'CSS'] },
-  { label: 'Backend', skills: ['Supabase', 'PostgreSQL', 'REST APIs'] },
+const CV_PDF_URL = `${import.meta.env.BASE_URL}HtinLin_Aung_CV.pdf`
+
+const SKILLS = [
+  'Flutter & Dart',
+  'React & Next.js',
+  'Supabase & PostgreSQL',
+  'TypeScript / JavaScript',
+  'Git & Deployment',
+]
+
+const STRENGTHS = [
+  'Fast independent learner',
+  'End-to-end project ownership',
+  'Clear technical communication',
+  'Problem-solving mindset',
+]
+
+const HOBBIES = [
+  'Exploring new frameworks',
+  'Game design & Unity',
+  'Tech & startup content',
+]
+
+const SUMMARY =
+  'Final-year ICT student with hands-on experience designing, building, and independently deploying full-stack mobile and web applications used by real businesses. Comfortable owning a project end-to-end — database schema, backend logic, UI, and production deployment — using Flutter, React, Next.js, and Supabase. Seeking a software development internship in Bangkok or remote.'
+
+const PROJECTS = [
   {
-    label: 'Languages',
-    skills: ['JavaScript', 'TypeScript', 'Python', 'Java', 'C#'],
+    title: 'Royal Ph7 — Water Delivery App',
+    meta: 'Flutter · Dart · Supabase · GoRouter',
+    bullets: [
+      'Real-time order tracking with Supabase streams and role-based access for customers, drivers, and admins.',
+      'Live chat with unread badges and shift management for delivery operations.',
+    ],
   },
-  { label: 'Game Dev', skills: ['Unity', 'C#'] },
-  { label: 'Tools', skills: ['Git', 'GitHub', 'Vercel', 'Figma'] },
+  {
+    title: 'Water Factory — Business Management System',
+    meta: 'Next.js 14 · TypeScript · Supabase · Vercel',
+    bullets: [
+      'Multi-city data isolation with Row Level Security for separate business units.',
+      'Credit sales tracking, stock management, and automated data retention via Vercel cron.',
+    ],
+  },
 ]
 
-const PROJECT_BULLETS: Record<number, string[]> = {
-  1: [
-    'Real-time order tracking with Supabase streams',
-    'Role-based access (Customer, Driver, Admin)',
-    'Live chat with unread message badges',
-  ],
-  2: [
-    'Multi-city data isolation with Row Level Security',
-    'Driver distribution tracking with cash reconciliation',
-    'Automated 3-month data retention with Vercel cron',
-  ],
-}
-
-const HOBBY_SHORT = [
-  'Reading',
-  'Gaming',
-  'Movies',
-  'Building Projects',
-  'Tech Trends',
-]
-
-function CvSectionLabel({ children }: { children: string }) {
+function ResumeSectionHeader({ children }: { children: string }) {
   return (
-    <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-water-cyan">
+    <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-gray-900">
       {children}
-    </p>
+    </h3>
   )
 }
 
-function CvPreviewCard({
-  onDownload,
-  downloading,
-}: {
-  onDownload: () => void
-  downloading: boolean
-}) {
-  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true })
-
+function SquareBulletItem({ children }: { children: string }) {
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, x: -60, scale: 0.95 }}
-      animate={inView ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: -60, scale: 0.95 }}
-      transition={{ duration: 0.7, ease: 'easeOut' }}
-      className="lg:sticky lg:top-24"
-    >
-      <div className="glass-card overflow-hidden rounded-2xl">
-        <div className="bg-gradient-to-br from-water-blue to-water-cyan px-8 py-6 text-center">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-white bg-white/20 text-2xl font-bold text-white">
-            HLA
-          </div>
-          <h3 className="mt-3 text-[22px] font-bold text-white">{cvData.name}</h3>
-          <p className="mt-1 text-[14px] text-white/70">{cvData.title}</p>
-          <p className="mt-1.5 flex items-center justify-center gap-1.5 text-[13px] text-white/70">
-            <MapPin size={14} />
-            {cvData.location}
-          </p>
-        </div>
-
-        <div className="cv-preview-body space-y-2 p-4">
-          <a
-            href={`mailto:${cvData.email}`}
-            className="flex items-center gap-2.5 text-[13px] text-water-blue hover:underline"
-          >
-            <Mail size={16} className="shrink-0 text-theme-muted" />
-            {cvData.email}
-          </a>
-          <p className="flex items-center gap-2.5 text-[13px] text-theme-muted">
-            <MessageCircle size={16} className="shrink-0" />
-            LINE: {cvData.line}
-          </p>
-          <a
-            href={`https://${cvData.github}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2.5 text-[13px] text-water-blue hover:underline"
-          >
-            <Github size={16} className="shrink-0 text-theme-muted" />
-            {cvData.github}
-          </a>
-
-          <hr className="border-theme" />
-
-          <div className="flex flex-wrap gap-2">
-            {['Flutter', 'React', 'Next.js', 'Supabase'].map((skill) => (
-              <span key={skill} className="cv-preview-pill">
-                {skill}
-              </span>
-            ))}
-          </div>
-
-          <hr className="border-theme" />
-
-          <p className="text-center text-[12px] text-theme-muted">Last updated: July 2026</p>
-        </div>
-      </div>
-
-      <button
-        type="button"
-        onClick={onDownload}
-        disabled={downloading}
-        className="cv-download-btn mt-3 flex h-[52px] w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-70"
-      >
-        {downloading ? (
-          <>
-            <Loader2 size={18} className="animate-spin" />
-            Generating PDF...
-          </>
-        ) : (
-          <>
-            <Download size={18} />
-            Download CV (PDF)
-          </>
-        )}
-      </button>
-    </motion.div>
+    <li className="flex items-start gap-2 text-sm text-gray-700">
+      <span className="mt-0.5 h-4 w-4 shrink-0 bg-gray-900" aria-hidden />
+      <span>{children}</span>
+    </li>
   )
 }
 
-function CvDocumentContent() {
+function ContactRow({
+  icon: Icon,
+  children,
+  href,
+}: {
+  icon: typeof MapPin
+  children: string
+  href?: string
+}) {
+  const content = (
+    <>
+      <Icon size={15} className="shrink-0 text-gray-500" strokeWidth={1.75} />
+      <span>{children}</span>
+    </>
+  )
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target={href.startsWith('http') ? '_blank' : undefined}
+        rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+        className="flex items-center gap-2 text-sm text-gray-700 transition-colors hover:text-gray-900"
+      >
+        {content}
+      </a>
+    )
+  }
+
+  return <div className="flex items-center gap-2 text-sm text-gray-700">{content}</div>
+}
+
+function ResumeCard() {
   return (
     <div
       id="cv-content"
-      className="cv-document rounded-2xl border border-slate-200 bg-white p-4 text-slate-800 leading-[1.4] sm:p-5"
+      className="rounded-2xl border border-gray-200 bg-white p-6 text-gray-900 shadow-sm sm:p-8 md:p-10"
     >
-      <header className="border-b border-water-blue/30 pb-2">
-        <h2 className="text-[28px] font-bold leading-[1.4] text-slate-900">{cvData.name}</h2>
-        <p className="mt-0.5 text-[14px] leading-[1.4] text-water-cyan">
-          Junior Software Developer | Mobile & Full Stack
-        </p>
-        <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] leading-[1.4] text-slate-500">
-          <span>{cvData.email}</span>
-          <span className="text-slate-300">·</span>
-          <span>LINE: {cvData.line}</span>
-          <span className="text-slate-300">·</span>
-          <span>{cvData.github}</span>
-          <span className="text-slate-300">·</span>
-          <span>{cvData.linkedin}</span>
-          <span className="text-slate-300">·</span>
-          <span>{cvData.location}</span>
-        </p>
+      <header className="flex items-start justify-between gap-6">
+        <div>
+          <p className="text-xs font-medium uppercase tracking-widest text-gray-500">
+            Junior Software Developer
+          </p>
+          <h2 className="mt-2 font-serif text-4xl font-bold leading-tight text-gray-900 md:text-5xl">
+            HTIN LIN
+            <br />
+            AUNG
+          </h2>
+        </div>
+        <img
+          src={profilePhoto}
+          alt={cvData.name}
+          className="h-20 w-20 shrink-0 rounded-full border border-gray-200 object-cover md:h-24 md:w-24"
+        />
       </header>
 
-      <section className="mt-3">
-        <CvSectionLabel>SUMMARY</CvSectionLabel>
-        <p className="text-[13px] leading-[1.4] text-slate-600">{cvData.summary}</p>
-      </section>
+      <hr className="my-6 border-gray-200" />
 
-      <section className="mt-3">
-        <CvSectionLabel>TECHNICAL SKILLS</CvSectionLabel>
-        <div className="grid gap-2 sm:grid-cols-2">
-          {CV_SKILL_CATEGORIES.map((cat) => (
-            <div key={cat.label}>
-              <p className="mb-0.5 text-[11px] font-bold leading-[1.4] text-slate-800">
-                {cat.label}
-              </p>
-              <div className="flex flex-wrap gap-1">
-                {cat.skills.map((skill) => (
-                  <span key={skill} className="cv-doc-pill">
-                    {skill}
-                  </span>
-                ))}
-              </div>
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_2fr] md:divide-x md:divide-gray-200">
+        <aside className="space-y-8 md:pr-8">
+          <section>
+            <ResumeSectionHeader>Contact</ResumeSectionHeader>
+            <div className="space-y-2">
+              <ContactRow icon={MapPin}>{cvData.location}</ContactRow>
+              <ContactRow icon={MessageCircle}>{`LINE: ${cvData.line}`}</ContactRow>
+              <ContactRow icon={Mail} href={`mailto:${cvData.email}`}>
+                {cvData.email}
+              </ContactRow>
+              <ContactRow icon={Link2} href={`https://${cvData.github}`}>
+                {cvData.github}
+              </ContactRow>
+              <ContactRow icon={Link2} href={`https://${cvData.linkedin}`}>
+                {cvData.linkedin}
+              </ContactRow>
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
 
-      <section className="mt-3">
-        <CvSectionLabel>EXPERIENCE</CvSectionLabel>
-        {cvData.experience.map((exp) => (
-          <div key={exp.role}>
-            <div className="flex flex-wrap items-baseline gap-2">
-              <p className="text-[14px] font-bold leading-[1.4] text-slate-900">{exp.role}</p>
-              <p className="text-[14px] font-medium leading-[1.4] text-water-blue">
-                {exp.company}
-              </p>
-            </div>
-            <p className="text-[12px] italic leading-[1.4] text-slate-500">
-              {exp.period} · {exp.type}
-            </p>
-            <ul className="mt-1">
-              {exp.points.map((point) => (
-                <li
-                  key={point}
-                  className="flex items-start gap-1.5 py-0.5 text-[12px] leading-[1.4] text-slate-600"
-                >
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-water-blue" />
-                  {point}
-                </li>
+          <section>
+            <ResumeSectionHeader>Skills</ResumeSectionHeader>
+            <ul className="space-y-1.5">
+              {SKILLS.map((skill) => (
+                <SquareBulletItem key={skill}>{skill}</SquareBulletItem>
               ))}
             </ul>
-          </div>
-        ))}
-      </section>
+          </section>
 
-      <section className="mt-3">
-        <CvSectionLabel>PROJECTS</CvSectionLabel>
-        <div className="space-y-2">
-          {projects
-            .filter((p) => p.featured)
-            .map((project) => (
-              <div key={project.id}>
-                <div className="flex flex-wrap items-center gap-2">
-                  <p className="text-[13px] font-bold leading-[1.4] text-slate-900">
-                    {project.title}
-                  </p>
-                  <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[9px] font-semibold uppercase leading-[1.4] text-emerald-600">
-                    Live
-                  </span>
-                </div>
-                <div className="mt-0.5 flex flex-wrap gap-1">
-                  {project.techStack.map((tech) => (
-                    <span key={tech} className="cv-doc-pill">
-                      {tech}
+          <section>
+            <ResumeSectionHeader>Languages</ResumeSectionHeader>
+            <ul className="space-y-1.5">
+              <SquareBulletItem>English | Professional</SquareBulletItem>
+              <SquareBulletItem>Burmese | Native</SquareBulletItem>
+            </ul>
+          </section>
+
+          <section>
+            <ResumeSectionHeader>Strengths</ResumeSectionHeader>
+            <ul className="space-y-1.5">
+              {STRENGTHS.map((strength) => (
+                <SquareBulletItem key={strength}>{strength}</SquareBulletItem>
+              ))}
+            </ul>
+          </section>
+
+          <section>
+            <ResumeSectionHeader>Hobbies</ResumeSectionHeader>
+            <ul className="space-y-1.5">
+              {HOBBIES.map((hobby) => (
+                <SquareBulletItem key={hobby}>{hobby}</SquareBulletItem>
+              ))}
+            </ul>
+          </section>
+
+          <section>
+            <ResumeSectionHeader>Education</ResumeSectionHeader>
+            <p className="font-semibold text-gray-900">{cvData.education.university}</p>
+            <p className="mt-1 text-sm text-gray-700">
+              B.Sc. Information &amp; Communication Technology
+            </p>
+            <p className="mt-1 text-xs text-gray-500">
+              Final-Year · Bangkok · Expected 2027
+            </p>
+          </section>
+        </aside>
+
+        <div className="space-y-8 md:pl-8">
+          <section>
+            <ResumeSectionHeader>Summary</ResumeSectionHeader>
+            <p className="text-sm leading-relaxed text-gray-700">{SUMMARY}</p>
+          </section>
+
+          <section>
+            <ResumeSectionHeader>Experience</ResumeSectionHeader>
+            {cvData.experience.map((exp) => (
+              <div key={exp.role}>
+                <p className="font-semibold text-gray-900">{exp.role}</p>
+                <p className="mt-0.5 text-xs text-gray-500">
+                  {exp.company} · {exp.type} · {exp.period}
+                </p>
+                <ul className="mt-3 space-y-2">
+                  <li className="flex items-start gap-2 text-sm text-gray-700">
+                    <span className="shrink-0">•</span>
+                    <span>
+                      Designed and built client websites, including a social welfare organization
+                      (brahmaso.org.mm) that is currently live and in active use.
                     </span>
-                  ))}
-                </div>
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-0.5 inline-block text-[11px] leading-[1.4] text-water-blue hover:underline"
-                >
-                  {project.liveUrl}
-                </a>
-                <ul className="mt-0.5">
-                  {(PROJECT_BULLETS[project.id] ?? []).map((bullet) => (
-                    <li
-                      key={bullet}
-                      className="py-0.5 text-[12px] leading-[1.4] text-slate-600"
-                    >
-                      · {bullet}
-                    </li>
-                  ))}
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-gray-700">
+                    <span className="shrink-0">•</span>
+                    <span>
+                      Managed full project lifecycle independently — requirements through
+                      deployment — for small businesses and non-profits in Myanmar.
+                    </span>
+                  </li>
                 </ul>
               </div>
             ))}
-        </div>
-      </section>
+          </section>
 
-      <section className="mt-3">
-        <CvSectionLabel>EDUCATION</CvSectionLabel>
-        <p className="text-[13px] font-bold leading-[1.4] text-slate-900">
-          {cvData.education.degree}
-        </p>
-        <p className="text-[12px] leading-[1.4] text-water-blue">
-          {cvData.education.university}
-        </p>
-        <p className="text-[12px] italic leading-[1.4] text-slate-500">
-          {cvData.education.period} · {cvData.education.location}
-        </p>
-      </section>
-
-      <section className="mt-3">
-        <CvSectionLabel>STRENGTHS</CvSectionLabel>
-        <div className="flex flex-col gap-0.5">
-          {cvData.strengths.map((strength) => (
-            <p
-              key={strength}
-              className="flex items-start gap-1.5 py-0.5 text-[12px] leading-[1.4] text-slate-600"
-            >
-              <span className="shrink-0 text-[10px] text-water-blue">→</span>
-              {strength}
-            </p>
-          ))}
+          <section>
+            <ResumeSectionHeader>Projects</ResumeSectionHeader>
+            <div className="space-y-6">
+              {PROJECTS.map((project) => (
+                <div key={project.title}>
+                  <p className="font-semibold text-gray-900">{project.title}</p>
+                  <p className="mt-0.5 text-xs text-gray-500">{project.meta}</p>
+                  <ul className="mt-3 space-y-2">
+                    {project.bullets.map((bullet) => (
+                      <li key={bullet} className="flex items-start gap-2 text-sm text-gray-700">
+                        <span className="shrink-0">•</span>
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
-      </section>
-
-      <section className="mt-3 grid gap-2 sm:grid-cols-2">
-        <div>
-          <CvSectionLabel>LANGUAGES</CvSectionLabel>
-          {cvData.languages.map((lang) => (
-            <p key={lang.language} className="py-0.5 text-[12px] leading-[1.4] text-slate-600">
-              <span className="font-medium text-slate-800">{lang.language}</span>
-              {' — '}
-              {lang.language === 'English' ? 'Professional' : 'Native'}
-            </p>
-          ))}
-        </div>
-        <div>
-          <CvSectionLabel>HOBBIES</CvSectionLabel>
-          <p className="text-[12px] leading-[1.4] text-slate-600">{HOBBY_SHORT.join(', ')}</p>
-        </div>
-      </section>
-
-      <footer className="mt-4 border-t border-slate-200 pt-2 text-center text-[11px] italic leading-[1.4] text-slate-500">
-        References available upon request
-      </footer>
+      </div>
     </div>
   )
 }
@@ -345,53 +276,22 @@ function SuccessToast({ show, onHide }: { show: boolean; onHide: () => void }) {
 }
 
 export default function CV() {
-  const [downloading, setDownloading] = useState(false)
   const [showToast, setShowToast] = useState(false)
 
-  const { ref: contentRef, inView: contentInView } = useInView({
+  const { ref, inView } = useInView({
     threshold: 0.1,
     triggerOnce: true,
   })
 
-  const handleDownload = async () => {
-    const element = document.getElementById('cv-content')
-    if (!element || downloading) return
-
-    setDownloading(true)
-    try {
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-      })
-
-      const imgData = canvas.toDataURL('image/png')
-      const pdf = new jsPDF('p', 'mm', 'a4')
-      const pdfWidth = pdf.internal.pageSize.getWidth()
-      const pdfHeight = pdf.internal.pageSize.getHeight()
-      const imgWidth = pdfWidth
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width
-
-      let heightLeft = imgHeight
-      let position = 0
-
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-      heightLeft -= pdfHeight
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight
-        pdf.addPage()
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-        heightLeft -= pdfHeight
-      }
-
-      pdf.save('HtinLin_Aung_CV.pdf')
-      setShowToast(true)
-    } catch (error) {
-      console.error('PDF generation failed:', error)
-    } finally {
-      setDownloading(false)
-    }
+  const handleDownload = () => {
+    const link = document.createElement('a')
+    link.href = CV_PDF_URL
+    link.download = 'HtinLin_Aung_CV.pdf'
+    link.rel = 'noopener noreferrer'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    setShowToast(true)
   }
 
   return (
@@ -399,19 +299,26 @@ export default function CV() {
       <div className="section-container">
         <SectionTitle title="My Resume" subtitle="Download or view my full CV" />
 
-        <div className="grid items-start gap-6 lg:grid-cols-[35%_65%]">
-          <CvPreviewCard onDownload={handleDownload} downloading={downloading} />
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="mx-auto max-w-5xl"
+        >
+          <ResumeCard />
 
-          <motion.div
-            ref={contentRef}
-            initial={{ opacity: 0, x: 60, scale: 0.95 }}
-            animate={contentInView ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: 60, scale: 0.95 }}
-            transition={{ duration: 0.7, ease: 'easeOut' }}
-            className="lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto"
-          >
-            <CvDocumentContent />
-          </motion.div>
-        </div>
+          <div className="mt-6 flex justify-center">
+            <button
+              type="button"
+              onClick={handleDownload}
+              className="cv-download-btn flex h-[52px] w-full max-w-md items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white transition-all duration-200"
+            >
+              <Download size={18} />
+              Download CV (PDF)
+            </button>
+          </div>
+        </motion.div>
       </div>
 
       <SuccessToast show={showToast} onHide={() => setShowToast(false)} />

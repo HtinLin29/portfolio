@@ -41,6 +41,9 @@ export default {
           '50%': { boxShadow: '0 0 40px rgba(6, 182, 212, 0.6)' },
         },
       },
+      fontFamily: {
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+      },
     },
   },
   plugins: [],
