@@ -81,11 +81,12 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={() => setMobileOpen(true)}
+              onClick={() => (mobileOpen ? setMobileOpen(false) : setMobileOpen(true))}
               className="flex h-10 w-10 items-center justify-center rounded-lg border border-theme md:hidden"
-              aria-label="Open menu"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
             >
-              <Menu size={20} />
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </nav>
@@ -93,59 +94,59 @@ export default function Navbar() {
 
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[60] flex flex-col bg-theme/95 backdrop-blur-xl md:hidden"
-          >
-            <div className="flex h-[72px] items-center justify-between px-4">
-              <span className="text-lg font-bold text-water-blue">💧 HtinLin</span>
-              <button
-                type="button"
-                onClick={() => setMobileOpen(false)}
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-theme"
-                aria-label="Close menu"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <motion.ul
-              initial={{ opacity: 0, y: 20 }}
+          <>
+            <motion.button
+              type="button"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              aria-label="Close menu"
+              className="fixed inset-0 z-[105] bg-[#0a0f1e]/80 backdrop-blur-sm md:hidden"
+              onClick={() => setMobileOpen(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ delay: 0.1 }}
-              className="flex flex-1 flex-col items-center justify-center gap-8"
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className="fixed inset-x-0 top-[72px] z-[110] flex max-h-[calc(100svh-72px)] flex-col overflow-y-auto border-b border-theme bg-[#0a0f1e]/98 shadow-xl backdrop-blur-xl md:hidden"
             >
-              {navLinks.map((link, i) => (
-                <motion.li
-                  key={link.to}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.05 }}
-                >
-                  <Link
-                    to={link.to}
-                    spy={false}
-                    smooth
-                    duration={500}
-                    offset={-80}
-                    onClick={() => setMobileOpen(false)}
-                    className={clsx(
-                      'text-2xl font-semibold transition-colors',
-                      activeSection === link.to
-                        ? 'text-water-blue'
-                        : 'text-theme-muted hover:text-theme-primary',
-                    )}
+              <motion.ul
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 12 }}
+                transition={{ delay: 0.05 }}
+                className="flex flex-col gap-1 px-4 py-6"
+              >
+                {navLinks.map((link, i) => (
+                  <motion.li
+                    key={link.to}
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 + i * 0.04 }}
                   >
-                    {link.label}
-                  </Link>
-                </motion.li>
-              ))}
-            </motion.ul>
-          </motion.div>
+                    <Link
+                      to={link.to}
+                      spy={false}
+                      smooth
+                      duration={500}
+                      offset={-80}
+                      onClick={() => setMobileOpen(false)}
+                      className={clsx(
+                        'block rounded-xl px-4 py-3 text-lg font-semibold transition-colors',
+                        activeSection === link.to
+                          ? 'bg-water-blue/10 text-water-blue'
+                          : 'text-theme-muted hover:bg-white/5 hover:text-theme-primary',
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

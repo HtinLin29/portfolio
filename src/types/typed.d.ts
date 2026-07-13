@@ -7,6 +7,7 @@ declare module 'typed.js' {
     loop?: boolean
     showCursor?: boolean
     cursorChar?: string
+    smartBackspace?: boolean
   }
 
   export default class Typed {

@@ -14,13 +14,12 @@ import clsx from 'clsx'
 import { cvData } from '../../data/cv-data'
 import { projects } from '../../data/projects'
 import profilePhoto from '../../assets/profile.png'
+import TerminalWidget from '../ui/TerminalWidget'
 
 const TYPEWRITER_STRINGS = [
-  'Flutter Developer',
-  'React Developer',
-  'Full Stack Developer',
+  'Full-Stack Developer',
   'Mobile App Developer',
-  'Game Developer in Training',
+  'Flutter & React Developer',
   'Junior Software Developer',
 ]
 
@@ -181,12 +180,14 @@ const FLAT_CODE_CHARS = flattenCodeLines(CODE_LINES)
 function TypewriterLine() {
   const elRef = useRef<HTMLSpanElement>(null)
   const typedRef = useRef<Typed | null>(null)
+  const mountedRef = useRef(false)
 
   useEffect(() => {
     const el = elRef.current
-    if (!el) return
+    if (!el || mountedRef.current) return
 
-    el.innerHTML = ''
+    mountedRef.current = true
+    el.textContent = ''
 
     typedRef.current = new Typed(el, {
       strings: TYPEWRITER_STRINGS,
@@ -196,19 +197,22 @@ function TypewriterLine() {
       loop: true,
       showCursor: true,
       cursorChar: '|',
-      smartBackspace: true,
+      smartBackspace: false,
     })
 
     return () => {
       typedRef.current?.destroy()
       typedRef.current = null
+      mountedRef.current = false
     }
   }, [])
 
   return (
     <span
       ref={elRef}
-      className="hero-typewriter font-heading block min-h-[1.4em] overflow-hidden text-ellipsis whitespace-nowrap font-semibold text-[22px] md:text-[28px]"
+      className="hero-typewriter font-heading block min-h-[1.4em] w-full overflow-visible whitespace-nowrap font-semibold text-[18px] sm:text-[22px] md:text-[28px]"
+      aria-live="polite"
+      aria-label="Current role"
     />
   )
 }
@@ -347,7 +351,7 @@ function CodeWindow() {
         setCardHovered(false)
         setHoveredLine(null)
       }}
-      className="code-card-glow glass-card hidden w-full max-w-md origin-center rounded-2xl md:block lg:max-w-lg"
+      className="code-card-glow glass-card w-full max-w-md origin-center rounded-2xl lg:max-w-lg"
     >
       <div className="relative flex items-center border-b border-white/10 px-4 py-3">
         <div className="flex items-center gap-2">
@@ -485,7 +489,7 @@ function ScrollIndicator({ visible }: { visible: boolean }) {
           transition={{ duration: 0.3 }}
           className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1.5"
         >
-          <span className="text-xs text-theme-muted" style={{ fontSize: '12px' }}>
+          <span className="text-xs text-slate-300" style={{ fontSize: '12px' }}>
             Scroll to explore
           </span>
           <ChevronDown size={18} className="animate-bounce-slow text-theme-muted" />
@@ -519,7 +523,7 @@ function HeroContent() {
       <div className="hero-glow pointer-events-none absolute inset-0 z-0" aria-hidden="true" />
 
       <div className="section-container relative z-[1] flex flex-1 items-center py-8 md:py-14">
-        <div className="grid w-full items-center gap-10 md:grid-cols-5 md:gap-12">
+        <div className="grid w-full items-center gap-10 md:grid-cols-5 md:items-start md:gap-12">
           <motion.div
             className="flex flex-col gap-4 md:col-span-3"
             variants={containerVariants}
@@ -645,13 +649,30 @@ function HeroContent() {
             <motion.div variants={itemVariants}>
               <div className="hero-availability-pill">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                Available for internship · Bangkok 🇹🇭
+                Open to internships · Bangkok 🇹🇭
               </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="mt-2 md:hidden">
+              <TerminalWidget />
             </motion.div>
           </motion.div>
 
-          <div className="hidden justify-center md:col-span-2 md:flex md:justify-end">
+          <div className="hidden w-full max-w-md flex-col gap-4 md:col-span-2 md:flex lg:max-w-lg">
             <CodeWindow />
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.1, ease: 'easeOut' }}
+              className="w-full"
+            >
+              <p className="mb-2 font-mono text-[11px] text-slate-400">
+                Interactive terminal — try{' '}
+                <span className="text-water-cyan">help</span> or{' '}
+                <span className="text-water-cyan">hire</span>
+              </p>
+              <TerminalWidget />
+            </motion.div>
           </div>
         </div>
       </div>
@@ -662,29 +683,5 @@ function HeroContent() {
 }
 
 export default function Hero() {
-  const [ready, setReady] = useState(false)
-
-  useEffect(() => {
-    setReady(true)
-  }, [])
-
-  if (!ready) {
-    return (
-      <section
-        id="home"
-        className="relative z-[1] flex min-h-[100svh] items-center overflow-hidden bg-transparent pt-0 md:min-h-[100vh] md:pt-[72px]"
-      >
-        <div className="section-container relative z-10 py-20">
-          <h1
-            className="font-heading text-[40px] font-extrabold text-white md:text-[80px]"
-            style={{ letterSpacing: '-2px' }}
-          >
-            HTIN LIN <span className="hero-name-gradient-dark">AUNG</span>
-          </h1>
-        </div>
-      </section>
-    )
-  }
-
   return <HeroContent />
 }

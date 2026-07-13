@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import emailjs, { EmailJSResponseStatus } from '@emailjs/browser'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import {
@@ -15,7 +16,63 @@ import SectionTitle from '../ui/SectionTitle'
 import { cvData } from '../../data/cv-data'
 
 const INTRO_TEXT =
-  "I'm currently seeking software development internship opportunities in Bangkok or remote. Whether you have a project in mind, want to discuss opportunities, or just want to say hello — my inbox is always open!"
+  "Have a project in mind or an internship opening? I'd love to hear from you — drop a message and I'll get back to you as soon as I can."
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const emailJsConfig = {
+  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID ?? '',
+  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID ?? '',
+  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY ?? '',
+}
+
+interface FormState {
+  name: string
+  email: string
+  subject: string
+  message: string
+}
+
+interface FormErrors {
+  name?: string
+  email?: string
+  subject?: string
+  message?: string
+}
+
+function isEmailJsConfigured() {
+  return (
+    emailJsConfig.serviceId &&
+    emailJsConfig.templateId &&
+    emailJsConfig.publicKey &&
+    !emailJsConfig.serviceId.includes('your_')
+  )
+}
+
+function buildTemplateParams(form: FormState) {
+  const name = form.name.trim()
+  const email = form.email.trim()
+  const subject = form.subject.trim()
+  const message = form.message.trim()
+
+  return {
+    from_name: name,
+    from_email: email,
+    subject,
+    message,
+    reply_to: email,
+  }
+}
+
+function getEmailJsErrorMessage(error: unknown) {
+  if (error instanceof EmailJSResponseStatus) {
+    return error.text || `Request failed (${error.status})`
+  }
+  if (error instanceof Error) {
+    return error.message
+  }
+  return 'Something went wrong. Please try again or email me directly.'
+}
 
 interface ContactCardConfig {
   id: string
@@ -75,20 +132,6 @@ const CONTACT_CARDS: ContactCardConfig[] = [
     type: 'linkedin',
   },
 ]
-
-interface FormState {
-  name: string
-  email: string
-  subject: string
-  message: string
-}
-
-interface FormErrors {
-  name?: string
-  email?: string
-  subject?: string
-  message?: string
-}
 
 function Toast({ message, show }: { message: string; show: boolean }) {
   return (
@@ -171,6 +214,7 @@ function ContactCard({
 
 function ContactForm() {
   const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true })
+  const formRef = useRef<HTMLFormElement>(null)
   const [form, setForm] = useState<FormState>({
     name: '',
     email: '',
@@ -180,26 +224,70 @@ function ContactForm() {
   const [errors, setErrors] = useState<FormErrors>({})
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+
+  useEffect(() => {
+    if (isEmailJsConfigured()) {
+      emailjs.init({ publicKey: emailJsConfig.publicKey })
+    }
+  }, [])
 
   const validate = () => {
     const next: FormErrors = {}
     if (!form.name.trim()) next.name = 'Name is required'
-    if (!form.email.trim()) next.email = 'Email is required'
+    if (!form.email.trim()) {
+      next.email = 'Email is required'
+    } else if (!EMAIL_REGEX.test(form.email.trim())) {
+      next.email = 'Enter a valid email address'
+    }
     if (!form.subject.trim()) next.subject = 'Subject is required'
     if (!form.message.trim()) next.message = 'Message is required'
     setErrors(next)
     return Object.keys(next).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setSubmitError('')
     if (!validate()) return
 
+    if (!isEmailJsConfigured()) {
+      setSubmitError(
+        'Email service is not configured yet. Add your EmailJS keys to the .env file.',
+      )
+      return
+    }
+
     setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
+
+    try {
+      const sendOptions = { publicKey: emailJsConfig.publicKey }
+
+      if (formRef.current) {
+        await emailjs.sendForm(
+          emailJsConfig.serviceId,
+          emailJsConfig.templateId,
+          formRef.current,
+          sendOptions,
+        )
+      } else {
+        await emailjs.send(
+          emailJsConfig.serviceId,
+          emailJsConfig.templateId,
+          buildTemplateParams(form),
+          sendOptions,
+        )
+      }
+
+      setForm({ name: '', email: '', subject: '', message: '' })
+      setErrors({})
       setSuccess(true)
-    }, 1500)
+    } catch (error) {
+      console.error('EmailJS error:', error)
+      setSubmitError(getEmailJsErrorMessage(error))
+    } finally {
+      setLoading(false)
+    }
   }
 
   const resetForm = () => {
@@ -256,6 +344,7 @@ function ContactForm() {
         ) : (
           <motion.form
             key="form"
+            ref={formRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -270,6 +359,7 @@ function ContactForm() {
               </label>
               <input
                 id="contact-name"
+                name="from_name"
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))}
@@ -287,6 +377,7 @@ function ContactForm() {
               </label>
               <input
                 id="contact-email"
+                name="from_email"
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
@@ -304,6 +395,7 @@ function ContactForm() {
               </label>
               <input
                 id="contact-subject"
+                name="subject"
                 type="text"
                 value={form.subject}
                 onChange={(e) => setForm((s) => ({ ...s, subject: e.target.value }))}
@@ -321,6 +413,7 @@ function ContactForm() {
               </label>
               <textarea
                 id="contact-message"
+                name="message"
                 value={form.message}
                 onChange={(e) => setForm((s) => ({ ...s, message: e.target.value }))}
                 placeholder="Hello! I'd like to discuss..."
@@ -331,6 +424,12 @@ function ContactForm() {
                 <p className="mt-1 text-xs text-red-500">{errors.message}</p>
               )}
             </div>
+
+            {submitError && (
+              <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                {submitError}
+              </p>
+            )}
 
             <button
               type="submit"
@@ -398,7 +497,7 @@ export default function Contact() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                 </span>
-                Currently available for internship opportunities
+                Responding within 24 hours — happy to chat about roles or projects
               </p>
               <p className="mt-2 text-[13px] text-theme-muted">
                 Based in Bangkok, Thailand 🇹🇭 · Open to remote

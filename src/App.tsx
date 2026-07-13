@@ -123,7 +123,7 @@ function ScrollProgress() {
 
   return (
     <div
-      className="pointer-events-none fixed left-0 right-0 top-0 z-[9999] h-[3px] bg-transparent"
+      className="scroll-progress-track pointer-events-none fixed left-0 right-0 top-0 z-[99] h-[3px]"
       aria-hidden="true"
     >
       <div ref={barRef} className="scroll-progress-bar h-full" style={{ width: '0%' }} />

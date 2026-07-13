@@ -23,22 +23,22 @@ const STAT_CARDS = [
   { value: 1, suffix: '+', label: 'Years Coding', icon: Clock },
 ]
 
-const INFO_ROWS: {
+const PRIMARY_INFO_ROWS: {
   label: string
   value: string
   type?: 'text' | 'email' | 'badge'
 }[] = [
-  { label: 'Name:', value: cvData.name },
-  { label: 'Email:', value: cvData.email, type: 'email' },
-  { label: 'LINE:', value: cvData.line },
-  { label: 'Location:', value: cvData.location },
-  { label: 'University:', value: cvData.education.university },
-  { label: 'Status:', value: 'Open to Internship ✅', type: 'badge' },
-  {
-    label: 'Languages:',
-    value: cvData.languages.map((l) => l.language).join(', '),
-  },
+  { label: 'Name', value: cvData.name },
+  { label: 'Email', value: cvData.email, type: 'email' },
+  { label: 'Location', value: cvData.location },
+  { label: 'University', value: cvData.education.university },
+  { label: 'Status', value: 'Open to Internship ✅', type: 'badge' },
 ]
+
+const SECONDARY_INFO = {
+  line: cvData.line,
+  languages: cvData.languages.map((l) => l.language).join(' · '),
+}
 
 function ProfilePhoto({ alt = cvData.name }: { alt?: string }) {
   const [imgError, setImgError] = useState(false)
@@ -151,40 +151,47 @@ export default function About() {
           <div>
             <SectionTitle title="About Me" align="left" />
 
-            <div className="mb-8">
+            <div className="mb-6">
               {BIO_STATEMENTS.map((statement, index) => (
                 <BioStatement key={statement} text={statement} index={index} />
               ))}
             </div>
 
-            <div className="mb-8 grid gap-3 sm:grid-cols-2">
-              {INFO_ROWS.map((row) => (
+            <div className="about-info-grid mb-4 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
+              {PRIMARY_INFO_ROWS.map((row) => (
                 <div
                   key={row.label}
-                  className="flex items-center justify-between gap-3 border-b border-theme/50 py-2 sm:justify-start sm:gap-4"
+                  className="flex items-baseline justify-between gap-3 border-b border-theme/40 py-1.5 sm:block"
                 >
-                  <span className="about-info-label shrink-0 text-[13px] text-theme-muted">
+                  <span className="about-info-label shrink-0 text-[12px] uppercase tracking-wide text-theme-muted">
                     {row.label}
                   </span>
                   {row.type === 'email' ? (
                     <a
                       href={`mailto:${row.value}`}
-                      className="text-right text-[13px] font-bold text-water-blue hover:underline sm:text-left"
+                      className="truncate text-right text-[13px] font-semibold text-water-blue hover:underline sm:text-left"
                     >
                       {row.value}
                     </a>
                   ) : row.type === 'badge' ? (
-                    <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[12px] font-semibold text-emerald-400">
+                    <span className="mt-0.5 inline-flex rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-400">
                       {row.value}
                     </span>
                   ) : (
-                    <span className="text-right text-[13px] font-bold text-theme-primary sm:text-left">
+                    <span className="truncate text-right text-[13px] font-semibold text-theme-primary sm:text-left">
                       {row.value}
                     </span>
                   )}
                 </div>
               ))}
             </div>
+
+            <p className="mb-6 text-[12px] text-theme-muted">
+              <span className="font-medium text-theme-primary">LINE:</span> {SECONDARY_INFO.line}
+              <span className="mx-2 text-theme-muted/50">·</span>
+              <span className="font-medium text-theme-primary">Languages:</span>{' '}
+              {SECONDARY_INFO.languages}
+            </p>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
               <button

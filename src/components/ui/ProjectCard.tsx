@@ -29,6 +29,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           <div
             className="flex h-14 w-14 items-center justify-center rounded-2xl text-2xl"
             style={{ backgroundColor: `${project.color}20` }}
+            aria-hidden="true"
           >
             {project.icon}
           </div>

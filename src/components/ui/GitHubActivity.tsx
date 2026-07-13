@@ -18,6 +18,9 @@ function getCellColor(count: number): string {
   return '#06B6D4'
 }
 
+const CELL_SIZE = 11
+const CELL_GAP = 3
+
 export default function GitHubActivity() {
   const [contributions, setContributions] = useState<ContributionDay[]>([])
   const [totalYear, setTotalYear] = useState(0)
@@ -64,39 +67,72 @@ export default function GitHubActivity() {
     return result
   }, [contributions])
 
+  const weekCount = weeks.length || 12
+  const graphMinWidth = weekCount * (CELL_SIZE + CELL_GAP)
+
+  const renderWeek = (week: ContributionDay[], weekIndex: number) => (
+    <div key={weekIndex} className="flex shrink-0 flex-col" style={{ gap: CELL_GAP }}>
+      {week.map((day) => (
+        <span
+          key={day.date}
+          title={`${day.date}: ${day.count} contributions`}
+          className="shrink-0 rounded-[2px] transition-transform duration-150 hover:scale-125"
+          style={{
+            width: CELL_SIZE,
+            height: CELL_SIZE,
+            backgroundColor: getCellColor(day.count),
+          }}
+        />
+      ))}
+    </div>
+  )
+
+  const renderSkeleton = () =>
+    Array.from({ length: 12 }).map((_, weekIndex) => (
+      <div key={weekIndex} className="flex shrink-0 flex-col" style={{ gap: CELL_GAP }}>
+        {Array.from({ length: 7 }).map((__, dayIndex) => (
+          <span
+            key={dayIndex}
+            className="shrink-0 rounded-[2px]"
+            style={{
+              width: CELL_SIZE,
+              height: CELL_SIZE,
+              backgroundColor: '#1A2035',
+            }}
+          />
+        ))}
+      </div>
+    ))
+
   return (
     <div className="w-full">
       <div className="glass-card rounded-xl border border-theme p-4">
-        <div className="flex gap-1 overflow-x-auto pb-1">
-          {weeks.length === 0
-            ? Array.from({ length: 12 }).map((_, weekIndex) => (
-                <div key={weekIndex} className="flex flex-col gap-1">
-                  {Array.from({ length: 7 }).map((__, dayIndex) => (
-                    <span
-                      key={dayIndex}
-                      className="h-[10px] w-[10px] shrink-0 rounded-[2px]"
-                      style={{ backgroundColor: '#1A2035' }}
-                    />
-                  ))}
-                </div>
-              ))
-            : weeks.map((week, weekIndex) => (
-                <div key={weekIndex} className="flex flex-col gap-1">
-                  {week.map((day) => (
-                    <span
-                      key={day.date}
-                      title={`${day.date}: ${day.count} contributions`}
-                      className="h-[10px] w-[10px] shrink-0 rounded-[2px] transition-transform duration-150 hover:scale-125"
-                      style={{ backgroundColor: getCellColor(day.count) }}
-                    />
-                  ))}
-                </div>
-              ))}
+        <div
+          className="github-contrib-scroll overflow-x-auto pb-1"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
+          <div
+            className="flex"
+            style={{ gap: CELL_GAP, minWidth: graphMinWidth }}
+            role="img"
+            aria-label={
+              totalYear > 0
+                ? `${totalYear} GitHub contributions in the last year`
+                : 'GitHub contribution activity graph'
+            }
+          >
+            {weeks.length === 0
+              ? renderSkeleton()
+              : weeks.map((week, weekIndex) => renderWeek(week, weekIndex))}
+          </div>
         </div>
         <p className="mt-3 text-center text-[12px] text-theme-muted">
           {totalYear > 0
             ? `${totalYear} contributions in the last year`
             : 'Contribution activity'}
+        </p>
+        <p className="mt-1 text-center text-[11px] text-theme-muted/70 md:hidden">
+          Swipe to explore →
         </p>
       </div>
     </div>
