@@ -38,4 +38,17 @@ export const projects: Project[] = [
     icon: '🏭',
     featured: true,
   },
+  {
+    id: 3,
+    title: 'Portfolio Website',
+    subtitle: 'Developer Portfolio',
+    description:
+      'A personal developer portfolio built to showcase real, deployed projects with an interactive, animated experience — featuring a particle background, live GitHub contribution graph, and a functional terminal easter egg.',
+    techStack: ['React', 'TypeScript', 'TailwindCSS', 'Framer Motion'],
+    liveUrl: 'https://htinlin29.github.io/portfolio/',
+    githubUrl: 'https://github.com/HtinLin29/portfolio',
+    color: '#6366F1',
+    icon: '💻',
+    featured: true,
+  },
 ]

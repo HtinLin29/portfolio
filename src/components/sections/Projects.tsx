@@ -17,6 +17,11 @@ const PROJECT_FEATURES: Record<number, string[]> = {
     'Driver distribution tracking with cash reconciliation',
     'Automated 3-month data retention with Vercel cron',
   ],
+  3: [
+    'Interactive terminal with custom commands',
+    'Live GitHub contributions & EmailJS contact form',
+    'Fully responsive, animated UI with Framer Motion',
+  ],
 }
 
 const TECH_TOOLTIPS: Record<string, string> = {
@@ -30,6 +35,8 @@ const TECH_TOOLTIPS: Record<string, string> = {
   Vercel: 'Deployment',
   TailwindCSS: 'Styling System',
   PostgreSQL: 'Relational Data',
+  React: 'UI Library',
+  'Framer Motion': 'Animations',
 }
 
 function TechBadge({ tech }: { tech: string }) {
@@ -81,22 +88,58 @@ const PREVIEW_PARTICLES = {
     { left: '86%', delay: '1.9s', duration: '9.5s', color: '#10B981' },
     { left: '28%', delay: '4.5s', duration: '10.5s', color: '#06B6D4' },
   ],
+  portfolio: [
+    { left: '12%', delay: '0.2s', duration: '9s', color: '#6366F1' },
+    { left: '30%', delay: '2.5s', duration: '11s', color: '#8B5CF6' },
+    { left: '48%', delay: '1.0s', duration: '10s', color: '#06B6D4' },
+    { left: '64%', delay: '3.2s', duration: '12s', color: '#6366F1' },
+    { left: '78%', delay: '1.8s', duration: '9.5s', color: '#8B5CF6' },
+    { left: '22%', delay: '4.0s', duration: '10.5s', color: '#06B6D4' },
+  ],
 } as const
 
+const PREVIEW_STYLES: Record<
+  number,
+  {
+    panel: string
+    orb: string
+    emoji: string
+    particles: (typeof PREVIEW_PARTICLES)[keyof typeof PREVIEW_PARTICLES]
+  }
+> = {
+  1: {
+    panel: 'project-preview-royal',
+    orb: 'project-preview-orb-royal',
+    emoji: 'project-preview-emoji-royal',
+    particles: PREVIEW_PARTICLES.royal,
+  },
+  2: {
+    panel: 'project-preview-factory',
+    orb: 'project-preview-orb-factory',
+    emoji: 'project-preview-emoji-factory',
+    particles: PREVIEW_PARTICLES.factory,
+  },
+  3: {
+    panel: 'project-preview-portfolio',
+    orb: 'project-preview-orb-portfolio',
+    emoji: 'project-preview-emoji-portfolio',
+    particles: PREVIEW_PARTICLES.portfolio,
+  },
+}
+
 function ProjectPreview({ project }: { project: Project }) {
-  const isRoyalPh7 = project.id === 1
-  const particles = isRoyalPh7 ? PREVIEW_PARTICLES.royal : PREVIEW_PARTICLES.factory
+  const preview = PREVIEW_STYLES[project.id] ?? PREVIEW_STYLES[2]
 
   return (
     <div
       className={clsx(
         'project-preview-panel relative flex min-h-[400px] flex-col items-center justify-center overflow-hidden px-10 pb-10 pt-6 lg:w-[45%]',
-        isRoyalPh7 ? 'project-preview-royal' : 'project-preview-factory',
+        preview.panel,
       )}
     >
       <div className="project-preview-fine-grid pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="project-preview-scanlines pointer-events-none absolute inset-0" aria-hidden="true" />
-      {particles.map((particle, index) => (
+      {preview.particles.map((particle, index) => (
         <span
           key={index}
           className="project-preview-particle"
@@ -115,16 +158,13 @@ function ProjectPreview({ project }: { project: Project }) {
       <div className="relative z-[1] flex flex-col items-center">
         <div className="relative flex items-center justify-center">
           <div
-            className={clsx(
-              'project-preview-orb',
-              isRoyalPh7 ? 'project-preview-orb-royal' : 'project-preview-orb-factory',
-            )}
+            className={clsx('project-preview-orb', preview.orb)}
             aria-hidden="true"
           />
           <span
             className={clsx(
               'project-emoji-float relative text-[72px] leading-none',
-              isRoyalPh7 ? 'project-preview-emoji-royal' : 'project-preview-emoji-factory',
+              preview.emoji,
             )}
             role="img"
             aria-hidden="true"
