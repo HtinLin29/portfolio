@@ -6,7 +6,7 @@ My personal developer portfolio, built to showcase real, deployed full-stack pro
 
 ## About
 
-I'm a final-year ICT student at Rangsit University in Bangkok, building mobile and web applications with Flutter, React, Next.js, and Supabase. This portfolio highlights two live, production-deployed projects currently used by real businesses, alongside my technical skills and background.
+I'm a final-year ICT student at Rangsit University in Bangkok, building mobile and web applications with Flutter, React, Next.js, and Supabase. This portfolio showcases my projects, technical skills, and background as I look for software development internship opportunities.
 
 ## Built With
 
@@ -26,13 +26,7 @@ I'm a final-year ICT student at Rangsit University in Bangkok, building mobile a
 - Live GitHub contributions graph
 - Functional contact form with EmailJS integration
 - Downloadable CV / resume
-- Project showcase with live demo and source code links
-
-## Featured Projects
-
-**[Royal Ph7](https://htinlin29.github.io/RoyalPH7_water_order_app)** — Water delivery mobile & web app with real-time order tracking, three user roles, and live chat. Built with Flutter, Dart, and Supabase.
-
-**[Water Factory](https://water-factory-sigma.vercel.app)** — Multi-city business management system with driver dispatch, credit sales, and automated reporting. Built with Next.js, TypeScript, and Supabase.
+- Project showcase with live demo and source code links, updated as new projects ship
 
 ## Contact
 
