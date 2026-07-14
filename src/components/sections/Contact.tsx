@@ -352,7 +352,7 @@ function ContactForm() {
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))}
-                placeholder="John Doe"
+                placeholder="Htin Lin Aung"
                 className={inputClass('name')}
               />
               {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
@@ -368,7 +368,7 @@ function ContactForm() {
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
-                placeholder="john@example.com"
+                placeholder="htin@example.com"
                 className={inputClass('email')}
               />
               {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
