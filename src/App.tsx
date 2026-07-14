@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import Particles, { ParticlesProvider } from '@tsparticles/react'
+import { useEffect, useRef, useState } from 'react'
+import { ParticlesProvider } from '@tsparticles/react'
 import { loadSlim } from '@tsparticles/slim'
-import type { ISourceOptions } from '@tsparticles/engine'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import Hero from './components/sections/Hero'
@@ -10,87 +9,8 @@ import Skills from './components/sections/Skills'
 import Projects from './components/sections/Projects'
 import CV from './components/sections/CV'
 import Contact from './components/sections/Contact'
+import GlobalParticles from './components/ui/GlobalParticles'
 import { useTheme } from './hooks/useTheme'
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
-  return isMobile
-}
-
-function GlobalParticles() {
-  const isMobile = useIsMobile()
-
-  const options = useMemo<ISourceOptions>(
-    () => ({
-      fullScreen: { enable: false },
-      background: { color: { value: 'transparent' } },
-      fpsLimit: 60,
-      interactivity: {
-        events: {
-          onHover: { enable: true, mode: 'grab' },
-          onClick: { enable: true, mode: 'push' },
-        },
-        modes: {
-          grab: {
-            distance: 180,
-            links: { opacity: 0.8, color: '#06B6D4' },
-          },
-          push: { quantity: 4 },
-        },
-      },
-      particles: {
-        color: {
-          value: ['#1A56DB', '#06B6D4', '#38BDF8'],
-        },
-        links: {
-          color: '#1A56DB',
-          distance: 150,
-          enable: true,
-          opacity: 0.15,
-          width: 1,
-        },
-        move: {
-          direction: 'none',
-          enable: true,
-          outModes: { default: 'bounce' },
-          random: true,
-          speed: 0.8,
-          straight: false,
-        },
-        number: {
-          density: { enable: true, area: 800 },
-          value: isMobile ? 30 : 80,
-        },
-        opacity: {
-          value: { min: 0.2, max: 0.6 },
-          animation: {
-            enable: true,
-            speed: 1,
-            minimumValue: 0.1,
-          },
-        },
-        shape: { type: 'circle' },
-        size: { value: { min: 1, max: 3 } },
-      },
-      detectRetina: true,
-    }),
-    [isMobile],
-  )
-
-  return (
-    <div className="global-particles-container" aria-hidden="true">
-      <Particles id="global-particles" className="global-particles-canvas" options={options} />
-    </div>
-  )
-}
 
 function ScrollProgress() {
   const barRef = useRef<HTMLDivElement>(null)
@@ -154,12 +74,12 @@ function SectionDivider() {
 
 function AppContent() {
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen bg-transparent">
       <GlobalParticles />
       <ScrollProgress />
       <CursorGlow />
       <Navbar />
-      <main className="relative z-[1]">
+      <main className="relative z-[1] bg-transparent">
         <Hero />
         <SectionDivider />
         <About />

@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import clsx from 'clsx'
 import { useScrollSpy } from '../../hooks/useScrollSpy'
+import BrandLogo from '../ui/BrandLogo'
 
 const navLinks = [
   { to: 'home', label: 'Home' },
@@ -52,9 +53,7 @@ export default function Navbar() {
             offset={-80}
             className="navbar-logo-group group flex cursor-pointer items-center gap-2"
           >
-            <span className="navbar-logo-emoji text-2xl transition-all duration-200 group-hover:scale-125 group-hover:drop-shadow-[0_0_8px_rgba(26,86,219,0.8)]">
-              💧
-            </span>
+            <BrandLogo className="transition-all duration-200 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(26,86,219,0.8)]" />
             <span className="text-lg font-bold text-water-blue">HtinLin</span>
           </Link>
 

@@ -1,0 +1,19 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="badgeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A56DB" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="112" height="112" rx="28" fill="url(#badgeGradient)" />
+  <text
+    x="60"
+    y="79"
+    font-family="'Montserrat', 'Helvetica Neue', Arial, sans-serif"
+    font-weight="800"
+    font-size="50"
+    fill="#FFFFFF"
+    text-anchor="middle"
+    letter-spacing="-1"
+  >HL</text>
+</svg>

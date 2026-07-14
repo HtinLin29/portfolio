@@ -1,6 +1,7 @@
 import { Github, Linkedin, Mail, MessageCircle } from 'lucide-react'
 import { Link } from 'react-scroll'
 import { cvData } from '../../data/cv-data'
+import BrandLogo from '../ui/BrandLogo'
 
 const navLinks = [
   { to: 'home', label: 'Home' },
@@ -44,9 +45,9 @@ export default function Footer() {
           smooth
           duration={500}
           offset={-80}
-          className="flex cursor-pointer items-center gap-2"
+          className="group flex cursor-pointer items-center gap-2"
         >
-          <span className="text-2xl">💧</span>
+          <BrandLogo className="transition-transform duration-200 group-hover:scale-110" />
           <span className="text-lg font-bold text-water-blue">HtinLin</span>
         </Link>
 
