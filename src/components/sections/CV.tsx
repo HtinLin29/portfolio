@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { Download, Link2, Mail, MapPin, MessageCircle } from 'lucide-react'
+import { Download, Link2, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 import SectionTitle from '../ui/SectionTitle'
 import { cvData } from '../../data/cv-data'
 import { downloadCvPdf } from '../../lib/downloadCv'
@@ -127,6 +127,9 @@ function ResumeCard() {
             <ResumeSectionHeader>Contact</ResumeSectionHeader>
             <div className="space-y-2">
               <ContactRow icon={MapPin}>{cvData.location}</ContactRow>
+              <ContactRow icon={Phone} href={`tel:${cvData.phone.replace(/\s/g, '')}`}>
+                {cvData.phone}
+              </ContactRow>
               <ContactRow icon={MessageCircle}>{`LINE: ${cvData.line}`}</ContactRow>
               <ContactRow icon={Mail} href={`mailto:${cvData.email}`}>
                 {cvData.email}

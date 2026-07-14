@@ -2,6 +2,7 @@ export const cvData = {
   name: 'Htin Lin Aung',
   title: 'Junior Software Developer',
   email: 'htinlin.a66@rsu.ac.th',
+  phone: '+66 81 329 8405',
   line: 'hlaung29',
   github: 'github.com/HtinLin29',
   linkedin: 'linkedin.com/in/htinlin29',
