@@ -514,7 +514,7 @@ function HeroContent() {
   return (
     <section
       id="home"
-      className="relative z-[1] flex min-h-[100svh] flex-col overflow-hidden bg-transparent pt-0 md:min-h-[100vh] md:pt-[72px]"
+      className="relative z-[1] flex min-h-[100svh] flex-col overflow-hidden bg-transparent pt-[88px] md:min-h-[100vh] md:pt-[72px]"
     >
       <div
         className="hero-orb hero-orb-primary pointer-events-none absolute z-0"
@@ -529,7 +529,7 @@ function HeroContent() {
       <div className="section-container relative z-[1] flex flex-1 items-center py-8 md:py-14">
         <div className="grid w-full items-center gap-10 md:grid-cols-5 md:items-start md:gap-12">
           <motion.div
-            className="flex flex-col gap-4 md:col-span-3"
+            className="flex w-full flex-col gap-4 md:col-span-3"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -597,7 +597,7 @@ function HeroContent() {
             <motion.div
               variants={itemVariants}
               transition={{ delay: 0.6, duration: 0.5, ease: 'easeOut' }}
-              className="flex flex-col gap-3 md:flex-row md:gap-4"
+              className="flex w-full flex-col gap-3 md:flex-row md:gap-4"
             >
               <Link
                 to="projects"
@@ -623,7 +623,7 @@ function HeroContent() {
             <motion.div
               variants={itemVariants}
               transition={{ delay: 0.8, duration: 0.5, ease: 'easeOut' }}
-              className="flex items-center gap-3"
+              className="flex w-full items-center gap-3"
             >
               <SocialLink label="GitHub" href="https://github.com/HtinLin29" icon={Github} />
               <SocialLink
@@ -635,14 +635,14 @@ function HeroContent() {
               <SocialLink label="LINE" icon={MessageCircle} tooltip={`LINE: ${cvData.line}`} />
             </motion.div>
 
-            <motion.div variants={itemVariants}>
-              <div className="hero-availability-pill">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+            <motion.div variants={itemVariants} className="w-full">
+              <div className="hero-availability-pill w-full justify-start sm:w-auto">
+                <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                 Open to internships · Bangkok 🇹🇭
               </div>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="mt-2 md:hidden">
+            <motion.div variants={itemVariants} className="mt-2 w-full md:hidden">
               <TerminalWidget />
             </motion.div>
           </motion.div>

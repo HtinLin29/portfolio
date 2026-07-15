@@ -41,7 +41,7 @@ export default function Navbar() {
           'fixed left-0 right-0 top-0 z-[100] h-[72px] transition-all duration-300',
           scrolled
             ? 'border-b border-theme bg-theme-card/80 shadow-lg backdrop-blur-xl'
-            : 'border-b border-transparent bg-transparent',
+            : 'border-b border-transparent bg-[#0a0f1e]/90 backdrop-blur-md md:bg-transparent md:backdrop-blur-none',
         )}
       >
         <nav className="section-container flex h-full items-center justify-between">

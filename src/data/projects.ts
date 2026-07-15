@@ -43,7 +43,7 @@ export const projects: Project[] = [
     title: 'Portfolio Website',
     subtitle: 'Developer Portfolio',
     description:
-      'A personal developer portfolio built to showcase real, deployed projects with an interactive, animated experience — featuring a particle background, live GitHub contribution graph, and a functional terminal easter egg.',
+      'A personal developer portfolio built to showcase real, deployed projects with an interactive, animated experience — featuring a particle background and a functional terminal easter egg.',
     techStack: ['React', 'TypeScript', 'TailwindCSS', 'Framer Motion'],
     liveUrl: 'https://htinlin29.github.io/portfolio/',
     githubUrl: 'https://github.com/HtinLin29/portfolio',

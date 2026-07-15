@@ -74,7 +74,7 @@ function SectionDivider() {
 
 function AppContent() {
   return (
-    <div className="relative min-h-screen bg-transparent">
+    <div className="relative min-h-screen bg-[#0a0f1e]">
       <GlobalParticles />
       <ScrollProgress />
       <CursorGlow />

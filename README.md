@@ -23,7 +23,6 @@ I'm a final-year ICT student at Rangsit University in Bangkok, building mobile a
 - Fully responsive design (desktop, tablet, mobile)
 - Animated hero section with typewriter effect and particle background
 - Interactive VS Code–style code card and terminal easter egg (try typing `help` or `hire`)
-- Live GitHub contributions graph
 - Functional contact form with EmailJS integration
 - Downloadable CV / resume
 - Project showcase with live demo and source code links, updated as new projects ship

@@ -6,7 +6,6 @@ import { downloadCvPdf } from '../../lib/downloadCv'
 import { Link } from 'react-scroll'
 import { Clock, Download, Folder, Globe, GraduationCap, Layers, MapPin } from 'lucide-react'
 import SectionTitle from '../ui/SectionTitle'
-import GitHubActivity from '../ui/GitHubActivity'
 import { cvData } from '../../data/cv-data'
 import profilePhoto from '../../assets/profile.png'
 
@@ -211,12 +210,6 @@ export default function About() {
           </div>
         </div>
 
-        <div className="mx-auto mt-12 w-full max-w-[800px]">
-          <p className="mb-3 text-center text-[11px] font-semibold uppercase tracking-[0.15em] text-water-cyan">
-            GitHub Contributions
-          </p>
-          <GitHubActivity />
-        </div>
       </div>
     </section>
   )

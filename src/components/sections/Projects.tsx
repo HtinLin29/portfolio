@@ -19,7 +19,7 @@ const PROJECT_FEATURES: Record<number, string[]> = {
   ],
   3: [
     'Interactive terminal with custom commands',
-    'Live GitHub contributions & EmailJS contact form',
+    'EmailJS contact form with real-time validation',
     'Fully responsive, animated UI with Framer Motion',
   ],
 }
