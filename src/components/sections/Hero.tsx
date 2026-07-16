@@ -133,6 +133,12 @@ const CODE_LINES: CodeLineData[] = [
   },
   {
     segments: [
+      { text: '    "StudyMate AI 📚"', className: 'text-[#86EFAC]' },
+      { text: ',', className: 'text-white/60' },
+    ],
+  },
+  {
+    segments: [
       { text: '    "Portfolio Website 💻"', className: 'text-[#86EFAC]' },
       { text: '', className: 'text-white/60' },
     ],
