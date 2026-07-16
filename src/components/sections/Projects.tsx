@@ -18,6 +18,11 @@ const PROJECT_FEATURES: Record<number, string[]> = {
     'Automated 3-month data retention with Vercel cron',
   ],
   3: [
+    'Subject-organized notes with per-user Supabase RLS',
+    'AI chat grounded in your own material via Gemini API',
+    'Auto-generated quizzes with score history over time',
+  ],
+  4: [
     'Interactive terminal with custom commands',
     'EmailJS contact form with real-time validation',
     'Fully responsive, animated UI with Framer Motion',
@@ -31,12 +36,15 @@ const TECH_TOOLTIPS: Record<string, string> = {
   GoRouter: 'Navigation',
   Provider: 'State Management',
   'Next.js': 'Full-stack Framework',
+  'Next.js 14': 'App Router Framework',
   TypeScript: 'Type Safety',
   Vercel: 'Deployment',
   TailwindCSS: 'Styling System',
   PostgreSQL: 'Relational Data',
   React: 'UI Library',
   'Framer Motion': 'Animations',
+  'Gemini API': 'AI Assistant',
+  'shadcn/ui': 'UI Components',
 }
 
 function TechBadge({ tech }: { tech: string }) {
@@ -88,6 +96,14 @@ const PREVIEW_PARTICLES = {
     { left: '86%', delay: '1.9s', duration: '9.5s', color: '#10B981' },
     { left: '28%', delay: '4.5s', duration: '10.5s', color: '#06B6D4' },
   ],
+  studymate: [
+    { left: '12%', delay: '0.2s', duration: '9s', color: '#8B5CF6' },
+    { left: '30%', delay: '2.5s', duration: '11s', color: '#6366F1' },
+    { left: '48%', delay: '1.0s', duration: '10s', color: '#06B6D4' },
+    { left: '64%', delay: '3.2s', duration: '12s', color: '#8B5CF6' },
+    { left: '78%', delay: '1.8s', duration: '9.5s', color: '#A78BFA' },
+    { left: '22%', delay: '4.0s', duration: '10.5s', color: '#06B6D4' },
+  ],
   portfolio: [
     { left: '12%', delay: '0.2s', duration: '9s', color: '#6366F1' },
     { left: '30%', delay: '2.5s', duration: '11s', color: '#8B5CF6' },
@@ -120,6 +136,12 @@ const PREVIEW_STYLES: Record<
     particles: PREVIEW_PARTICLES.factory,
   },
   3: {
+    panel: 'project-preview-studymate',
+    orb: 'project-preview-orb-studymate',
+    emoji: 'project-preview-emoji-studymate',
+    particles: PREVIEW_PARTICLES.studymate,
+  },
+  4: {
     panel: 'project-preview-portfolio',
     orb: 'project-preview-orb-portfolio',
     emoji: 'project-preview-emoji-portfolio',
@@ -161,32 +183,41 @@ function ProjectPreview({ project }: { project: Project }) {
 
       <LiveBadge />
 
-      <div className="relative z-[1] flex flex-col items-center">
-        <div className="relative flex items-center justify-center">
-          <div className={clsx('project-preview-orb', preview.orb)} aria-hidden="true" />
-          <span
-            className={clsx('project-emoji-float relative text-[72px] leading-none', preview.emoji)}
-            role="img"
-            aria-hidden="true"
-          >
-            {project.icon}
-          </span>
-        </div>
-        <h3 className="font-heading relative mt-3 text-center text-2xl font-bold text-white">
-          {project.title}
-        </h3>
-        <div className="relative mt-4 flex flex-wrap justify-center gap-2">
-          {project.techStack.slice(0, 3).map((tech) => (
+      {project.image ? (
+        <img
+          src={project.image}
+          alt={`${project.title} preview`}
+          className="absolute inset-0 z-[1] h-full w-full object-cover object-top"
+          loading="lazy"
+        />
+      ) : (
+        <div className="relative z-[1] flex flex-col items-center">
+          <div className="relative flex items-center justify-center">
+            <div className={clsx('project-preview-orb', preview.orb)} aria-hidden="true" />
             <span
-              key={tech}
-              className="rounded-full px-2.5 py-0.5 text-[12px] text-white/70"
-              style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
+              className={clsx('project-emoji-float relative text-[72px] leading-none', preview.emoji)}
+              role="img"
+              aria-hidden="true"
             >
-              {tech}
+              {project.icon}
             </span>
-          ))}
+          </div>
+          <h3 className="font-heading relative mt-3 text-center text-2xl font-bold text-white">
+            {project.title}
+          </h3>
+          <div className="relative mt-4 flex flex-wrap justify-center gap-2">
+            {project.techStack.slice(0, 3).map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full px-2.5 py-0.5 text-[12px] text-white/70"
+                style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
