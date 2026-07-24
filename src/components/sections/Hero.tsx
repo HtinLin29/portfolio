@@ -18,9 +18,9 @@ const TYPEWRITER_STRINGS = [
 ]
 
 const STATS = [
-  { value: '2+', label: 'Live Projects' },
-  { value: '3+', label: 'Tech Stacks' },
-  { value: '🚀', label: 'Open to Internship' },
+  { value: '3', label: 'Live Projects' },
+  { value: '6', label: 'Tech Stacks' },
+  { value: '4', label: 'Years Coding' },
 ]
 
 const containerVariants = {
