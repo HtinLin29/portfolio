@@ -17,10 +17,10 @@ const BIO_STATEMENTS = [
 ]
 
 const STAT_CARDS = [
-  { value: 3, suffix: '', label: 'Live Projects', icon: Folder },
-  { value: 6, suffix: '', label: 'Tech Stacks', icon: Layers },
-  { value: 2, suffix: '', label: 'Languages', icon: Globe },
-  { value: 4, suffix: '', label: 'Years Coding', icon: Clock },
+  { value: 3, suffix: '+', label: 'Live Projects', icon: Folder },
+  { value: 6, suffix: '+', label: 'Tech Stacks', icon: Layers },
+  { value: 2, suffix: '+', label: 'Languages', icon: Globe },
+  { value: 4, suffix: '+', label: 'Years Coding', icon: Clock },
 ]
 
 const PRIMARY_INFO_ROWS: {
