@@ -184,12 +184,14 @@ function ProjectPreview({ project }: { project: Project }) {
       <LiveBadge />
 
       {project.image ? (
-        <img
-          src={project.image}
-          alt={`${project.title} preview`}
-          className="absolute inset-0 z-[1] h-full w-full object-cover object-top"
-          loading="lazy"
-        />
+        <div className="absolute inset-0 z-[1] p-4 sm:p-5">
+          <img
+            src={project.image}
+            alt={`${project.title} preview`}
+            className="h-full w-full rounded-xl object-contain object-top"
+            loading="lazy"
+          />
+        </div>
       ) : (
         <div className="relative z-[1] flex flex-col items-center">
           <div className="relative flex items-center justify-center">
