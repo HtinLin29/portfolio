@@ -155,7 +155,10 @@ function ProjectPreview({ project }: { project: Project }) {
   return (
     <div
       className={clsx(
-        'project-preview-panel relative flex min-h-[400px] flex-col items-center justify-center overflow-hidden px-10 pb-10 pt-6 lg:w-[45%]',
+        'project-preview-panel relative flex flex-col items-center justify-center overflow-hidden lg:w-[45%]',
+        project.image
+          ? 'min-h-[280px] sm:min-h-[320px] lg:min-h-[380px]'
+          : 'min-h-[400px] px-10 pb-10 pt-6',
         preview.panel,
       )}
     >
@@ -184,11 +187,11 @@ function ProjectPreview({ project }: { project: Project }) {
       <LiveBadge />
 
       {project.image ? (
-        <div className="absolute inset-0 z-[1] p-4 sm:p-5">
+        <div className="absolute inset-0 z-[1] flex items-center justify-center p-5 sm:p-6 lg:p-8">
           <img
             src={project.image}
             alt={`${project.title} preview`}
-            className="h-full w-full rounded-xl object-contain object-top"
+            className="max-h-full max-w-full rounded-xl object-contain shadow-[0_12px_40px_rgba(0,0,0,0.45)]"
             loading="lazy"
           />
         </div>
