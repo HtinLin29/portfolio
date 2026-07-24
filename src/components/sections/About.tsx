@@ -12,15 +12,15 @@ import profilePhoto from '../../assets/profile.png'
 const BIO_STATEMENTS = [
   'Final year ICT student at Rangsit University Bangkok',
   'Building real apps with Flutter, React & Next.js',
-  '2 live deployed projects used by real businesses',
+  '3 live deployed projects used by real businesses',
   'Seeking software development internship — on-site or remote',
 ]
 
 const STAT_CARDS = [
-  { value: 2, suffix: '+', label: 'Live Projects', icon: Folder },
-  { value: 3, suffix: '+', label: 'Tech Stacks', icon: Layers },
+  { value: 3, suffix: '', label: 'Live Projects', icon: Folder },
+  { value: 6, suffix: '', label: 'Tech Stacks', icon: Layers },
   { value: 2, suffix: '', label: 'Languages', icon: Globe },
-  { value: 1, suffix: '+', label: 'Years Coding', icon: Clock },
+  { value: 4, suffix: '', label: 'Years Coding', icon: Clock },
 ]
 
 const PRIMARY_INFO_ROWS: {
