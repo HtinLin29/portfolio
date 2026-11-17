@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer'
 import { Check, ExternalLink, Github } from 'lucide-react'
 import clsx from 'clsx'
 import SectionTitle from '../ui/SectionTitle'
+import LinnPharmacyCaseStudy from './LinnPharmacyCaseStudy'
 import { projects, type Project } from '../../data/projects'
 
 const PROJECT_FEATURES: Record<number, string[]> = {
@@ -389,6 +390,7 @@ export default function Projects() {
         <SectionTitle title="My Projects" subtitle="Things I have built and deployed" />
 
         <div className="flex flex-col gap-10">
+          <LinnPharmacyCaseStudy />
           {featuredProjects.map((project, index) => (
             <FeaturedProjectCard key={project.id} project={project} index={index} />
           ))}
