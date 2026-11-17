@@ -9,7 +9,7 @@ const PROJECT_FEATURES: Record<number, string[]> = {
   1: ['Real-time order tracking with Supabase streams', 'Customer, driver and admin roles', 'Live chat with unread badges'],
   2: ['Multi-city data isolation with RLS', 'Driver cash reconciliation', 'Automated data retention via cron'],
   3: ['AI chat grounded in your own notes', 'Auto-generated quizzes', 'Per-user data isolation with RLS'],
-  4: ['Interactive terminal with commands', 'Bento hero with cursor-lit cards', 'Fully responsive and animated'],
+  4: ['Interactive terminal with commands', 'Animated intro and 3D hero card', 'Fully responsive and animated'],
 }
 
 function Preview({ project, number }: { project: Project; number: string }) {

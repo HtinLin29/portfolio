@@ -8,9 +8,6 @@ import { cvData } from '../../data/cv-data'
 const CV_IMAGE_URL = `${import.meta.env.BASE_URL}cv-preview.png`
 const ZOOMS = [100, 140, 180, 220]
 
-/** Phones open zoomed in so the text is readable straight away. */
-const defaultZoom = () => (window.innerWidth < 640 ? 2 : 0)
-
 /** Full-screen, readable CV viewer. Opens via openCvViewer(); no download needed. */
 export default function CvViewer() {
   const [open, setOpen] = useState(false)
@@ -20,7 +17,7 @@ export default function CvViewer() {
   useEffect(
     () =>
       onOpenCvViewer(() => {
-        setZoom(defaultZoom())
+        setZoom(0) // always open fitted to the screen; + zooms in
         setOpen(true)
       }),
     [],
@@ -93,7 +90,7 @@ export default function CvViewer() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-auto px-3 py-6 sm:px-6 sm:py-10">
+          <div className="flex-1 overflow-auto px-2 py-4 sm:px-6 sm:py-10">
             <motion.img
               src={CV_IMAGE_URL}
               alt={`${cvData.name} CV`}

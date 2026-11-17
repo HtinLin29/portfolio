@@ -90,9 +90,9 @@ export default function LinnPharmacyCaseStudy() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 + i * 0.08 }}
-                className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5"
+                className="min-w-0 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4 sm:p-5"
               >
-                <p className="font-heading text-shimmer text-[34px] font-bold leading-none">{s.value}</p>
+                <p className="font-heading text-shimmer text-[26px] font-bold leading-none sm:text-[34px]">{s.value}</p>
                 <p className="mt-2 text-[12px] text-slate-400">{s.label}</p>
               </motion.div>
             ))}

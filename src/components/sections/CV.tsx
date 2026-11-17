@@ -63,7 +63,7 @@ const ENTRIES: Entry[] = [
     ),
   },
   {
-    year: '2023',
+    year: '2023–Now',
     title: 'Freelance Web Developer',
     org: 'ICT for Development Team · Remote · 2023 — Present',
     body: (
@@ -88,7 +88,7 @@ const ENTRIES: Entry[] = [
     ),
   },
   {
-    year: '2023',
+    year: '2023–2027',
     title: 'B.Sc. Information & Communication Technology',
     org: `${cvData.education.university} · Bangkok · 2023 — 2027`,
     tag: 'Final year',

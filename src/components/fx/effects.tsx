@@ -69,26 +69,18 @@ export function FlipWords({ words, interval = 2600, className }: { words: string
   const word = words[i]
   return (
     <span className="relative inline-block">
-      <AnimatePresence mode="wait">
+      {/* The word is animated as one piece: per-letter blur on children breaks
+          gradient (background-clip: text) rendering and left the word invisible. */}
+      <AnimatePresence mode="wait" initial={false}>
         <motion.span
           key={word}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -40, x: 40, filter: 'blur(8px)', scale: 2, position: 'absolute' }}
-          transition={{ type: 'spring', stiffness: 100, damping: 10 }}
-          className={clsx('relative z-10 inline-block whitespace-nowrap', className)}
+          initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          exit={{ opacity: 0, y: -18, filter: 'blur(6px)' }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="relative z-10 inline-block whitespace-nowrap"
         >
-          {word.split('').map((letter, j) => (
-            <motion.span
-              key={`${word}-${j}`}
-              initial={{ opacity: 0, y: 10, filter: 'blur(8px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ delay: j * 0.04, duration: 0.25 }}
-              className="inline-block"
-            >
-              {letter === ' ' ? ' ' : letter}
-            </motion.span>
-          ))}
+          <span className={className}>{word}</span>
         </motion.span>
       </AnimatePresence>
     </span>

@@ -7,8 +7,8 @@ import { useScrollSpy } from '../../hooks/useScrollSpy'
 import { openCvViewer } from '../../lib/cvViewer'
 import BrandLogo from '../ui/BrandLogo'
 
+// No "Home" link: the logo already scrolls to the top, and Home sat too close to About.
 const navLinks = [
-  { to: 'home', label: 'Home' },
   { to: 'about', label: 'About' },
   { to: 'skills', label: 'Skills' },
   { to: 'projects', label: 'Projects' },
