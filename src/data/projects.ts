@@ -46,8 +46,8 @@ export const projects: Project[] = [
     description:
       'AI-powered study companion that lets students organize notes by subject, chat with an AI assistant grounded in their own material using the Gemini API, and auto-generate quizzes to test recall — with score history tracked over time. Fully responsive with secure per-user data isolation via Supabase Row Level Security.',
     techStack: ['Next.js 14', 'TypeScript', 'Supabase', 'TailwindCSS', 'Gemini API', 'shadcn/ui'],
-    liveUrl: 'https://studymate-ai.vercel.app',
-    githubUrl: 'https://github.com/HtinLin29/studymate-ai',
+    liveUrl: 'https://study-mate-ai-five.vercel.app',
+    githubUrl: 'https://github.com/HtinLin29/StudyMateAi',
     color: '#8B5CF6',
     icon: '📚',
     image: `${import.meta.env.BASE_URL}projects/studymate-ai.png`,

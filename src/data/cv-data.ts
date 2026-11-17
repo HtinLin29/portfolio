@@ -34,7 +34,7 @@ export const cvData = {
     degree: 'Bachelor of Science — Information and Communication Technology',
     university: 'Rangsit University',
     location: 'Bangkok, Thailand',
-    period: '2023 — Present (Expected 2026)',
+    period: '2023 — Present (Expected 2027)',
     courses: [
       'Data Structures',
       'Database Systems',
