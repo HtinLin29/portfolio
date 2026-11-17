@@ -19,11 +19,18 @@ export const cvData = {
   ],
   experience: [
     {
-      role: 'Intern',
+      role: 'Software Developer Intern',
       company: 'DiscoverToday International Marketing Pty., Ltd.',
-      period: 'Nov 2026',
-      type: 'Internship',
-      points: ['Completed an internship at DiscoverToday International Marketing Pty., Ltd. (Nov 2026).'],
+      period: 'Aug – Nov 2026',
+      type: 'Internship · Bangkok',
+      points: [
+        'Completed 14 backlog tasks across 3 company products, each tested on real devices with real data.',
+        'LocalPlus mobile app (React Native, Expo): built kid-profile onboarding and the “Word Forge” spelling game (100-word bank, XP and tiers), plus 5 Gigs features — act pages, follow + notifications, audio/video samples, browse modes and private hire inquiries.',
+        'AmazingLiving Services (Next.js, Supabase): fixed the agent signup flow, rebuilt a password reset page that returned 404 in production, added booking status emails with Resend, and enforced agent suspension across the database, pages and routes with row level security.',
+        'Designed a 9-table PostgreSQL learner schema with row level security, and found and fixed an infinite-recursion bug in database security policies.',
+        'Auto Newsroom: published about 10 English news articles a day to WordPress and 11 Facebook pages, fact-checking AI-written drafts and reviewing the system for bugs.',
+      ],
+      tools: ['React Native', 'Expo', 'TypeScript', 'Next.js', 'Supabase', 'PostgreSQL', 'Resend', 'WordPress'],
     },
     {
       role: 'Freelance Web Developer',

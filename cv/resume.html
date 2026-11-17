@@ -221,7 +221,7 @@
         letter-spacing: 0.16em;
         text-transform: uppercase;
         color: var(--navy);
-        margin: 7mm 0 3.5mm;
+        margin: 5.5mm 0 3mm;
         display: flex;
         align-items: center;
         gap: 3mm;
@@ -240,7 +240,7 @@
         background: var(--rule);
       }
       .entry {
-        margin-bottom: 4.2mm;
+        margin-bottom: 3.6mm;
       }
       .entry-head {
         display: flex;
@@ -349,7 +349,7 @@
           </div>
           <div class="skill-group">
             <p>Frontend &amp; mobile</p>
-            <div class="chips"><span>React</span><span>Next.js</span><span>Flutter</span><span>TailwindCSS</span></div>
+            <div class="chips"><span>React</span><span>Next.js</span><span>Flutter</span><span>TailwindCSS</span><span>React Native</span></div>
           </div>
           <div class="skill-group">
             <p>Backend &amp; data</p>
@@ -390,19 +390,24 @@
         <p class="eyebrow">Junior Software Developer</p>
         <h1>Htin Lin <span>Aung</span></h1>
         <p class="summary">
-          Final-year ICT student at Rangsit University who designs, builds and deploys full-stack web and
-          mobile applications used by real businesses — most recently a pharmacy point-of-sale system in
-          daily use. Comfortable owning a project end to end: database schema, backend, UI and production
-          deployment, with Next.js, NestJS, Flutter, PostgreSQL and Supabase.
+          Final-year ICT student and former software developer intern who designs, builds and deploys
+          full-stack web and mobile apps used by real businesses — including a pharmacy point-of-sale system
+          in daily use. Works end to end with Next.js, NestJS, React Native, Flutter, PostgreSQL and Supabase.
         </p>
 
         <h2>Experience</h2>
         <div class="entry">
           <div class="entry-head">
-            <p class="entry-title">Intern</p>
-            <span class="entry-date">Nov 2026</span>
+            <p class="entry-title">Software Developer Intern</p>
+            <span class="entry-date">Aug – Nov 2026</span>
           </div>
-          <p class="entry-meta">DiscoverToday International Marketing Pty., Ltd.</p>
+          <p class="entry-meta">DiscoverToday International Marketing Pty., Ltd. · Bangkok</p>
+          <ul>
+            <li>Completed 14 backlog tasks across 3 products, tested on real devices with real data; found and fixed an RLS infinite-recursion bug.</li>
+            <li>LocalPlus app (React Native): built kid-profile onboarding, the “Word Forge” spelling game and 5 Gigs features such as follow + notifications.</li>
+            <li>AmazingLiving Services (Next.js, Supabase): fixed agent signup and a 404 password reset in production; added Resend booking emails and RLS agent suspension.</li>
+            <li>Auto Newsroom: published ~10 fact-checked English articles a day to WordPress and 11 Facebook pages.</li>
+          </ul>
         </div>
         <div class="entry">
           <div class="entry-head">
@@ -427,9 +432,8 @@
           </div>
           <p class="entry-meta">Next.js · NestJS · TypeORM · PostgreSQL · nginx · Cloudflare · <a href="https://linnpharmacy.com">linnpharmacy.com</a></p>
           <ul>
-            <li>Designed, built and deployed a full point-of-sale system for a pharmacy in Myanmar: 30+ screens and 19 backend services.</li>
-            <li>First-expiry-first-out stock deduction inside database transactions with row locks; box, strip and tablet units with price tiers.</li>
-            <li>Per-staff permissions and blind shift close; self-hosted with one-command deploy/rollback, encrypted nightly backups and monthly restore tests.</li>
+            <li>Built and deployed a full pharmacy POS in Myanmar (30+ screens, 19 services) with expiry-first stock deduction under row locks.</li>
+            <li>Per-staff permissions and blind shift close; self-hosted with one-command deploy/rollback, encrypted backups and restore tests.</li>
           </ul>
         </div>
         <div class="entry">
@@ -439,8 +443,7 @@
           </div>
           <p class="entry-meta">Next.js · TypeScript · Supabase · Vercel</p>
           <ul>
-            <li>Multi-city operations for a water factory in Myanmar, with each city's data isolated by Row Level Security.</li>
-            <li>Driver distribution with cash reconciliation, credit sales, stock management and automated data retention via cron.</li>
+            <li>Multi-city operations for a water factory in Myanmar: RLS data isolation, driver cash reconciliation, credit sales and stock.</li>
           </ul>
         </div>
         <div class="entry">
@@ -450,7 +453,7 @@
           </div>
           <p class="entry-meta">Flutter · Dart · Supabase · GoRouter</p>
           <ul>
-            <li>Mobile and web delivery app with real-time order tracking and separate customer, driver and admin roles; live chat and driver shifts.</li>
+            <li>Delivery app with real-time order tracking, customer/driver/admin roles, live chat and driver shifts.</li>
           </ul>
         </div>
         <div class="entry">
@@ -460,7 +463,7 @@
           </div>
           <p class="entry-meta">Next.js · TypeScript · Supabase · Gemini API</p>
           <ul>
-            <li>Notes organised by subject, AI chat grounded in the student's own material, and auto-generated quizzes with score history.</li>
+            <li>Notes by subject, AI chat grounded in the student's own notes, and auto-generated quizzes.</li>
           </ul>
         </div>
       </main>

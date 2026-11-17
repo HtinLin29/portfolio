@@ -17,12 +17,39 @@ interface Entry {
   body?: ReactNode
 }
 
+const INTERNSHIP = cvData.experience[0]
+
+function Bullets({ points }: { points: string[] }) {
+  return (
+    <ul className="space-y-2.5">
+      {points.map((p) => (
+        <li key={p} className="flex gap-2.5">
+          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#38BDF8]" />
+          {p}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 const ENTRIES: Entry[] = [
   {
-    year: 'Nov 2026',
-    title: 'Intern',
-    org: 'DiscoverToday International Marketing Pty., Ltd.',
+    year: 'Aug–Nov 2026',
+    title: INTERNSHIP.role,
+    org: `${INTERNSHIP.company} · Bangkok`,
     tag: 'Completed',
+    body: (
+      <>
+        <Bullets points={INTERNSHIP.points} />
+        <ul className="mt-5 flex flex-wrap gap-1.5">
+          {((INTERNSHIP as { tools?: string[] }).tools ?? []).map((t) => (
+            <li key={t} className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 font-mono text-[11px] text-slate-400">
+              {t}
+            </li>
+          ))}
+        </ul>
+      </>
+    ),
   },
   {
     year: '2026',

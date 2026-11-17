@@ -49,7 +49,7 @@ export default function About() {
                 point-of-sale system that a real business uses every day.
               </p>
               <p>
-                I recently completed an internship at <span className="text-slate-200">DiscoverToday International Marketing</span>.
+                I recently completed a software developer internship at <span className="text-slate-200">DiscoverToday International Marketing</span>, shipping features across three of their products.
                 I work mostly in <span className="text-[#38BDF8]">TypeScript</span> (Next.js, NestJS) and{' '}
                 <span className="text-[#38BDF8]">Flutter</span> with PostgreSQL underneath — and I&apos;m looking for my next role.
               </p>

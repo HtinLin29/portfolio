@@ -14,6 +14,8 @@ export const CORE_SKILLS = new Set([
   'Dart',
   'NestJS',
   'Node.js',
+  'React Native',
+  'Expo',
   'PostgreSQL',
   'Supabase',
   'TailwindCSS',
@@ -30,7 +32,7 @@ export const skillCategories: SkillCategory[] = [
     category: 'Backend & Data',
     icon: '🗄️',
     blurb: 'APIs, auth and databases',
-    skills: ['Node.js', 'NestJS', 'PostgreSQL', 'Supabase', 'TypeORM', 'REST APIs', 'Row Level Security'],
+    skills: ['Node.js', 'NestJS', 'PostgreSQL', 'Supabase', 'TypeORM', 'REST APIs', 'Row Level Security', 'Resend'],
   },
   {
     category: 'Mobile',
@@ -54,6 +56,6 @@ export const skillCategories: SkillCategory[] = [
     category: 'Tools',
     icon: '🛠️',
     blurb: 'Everyday toolkit',
-    skills: ['Git', 'GitHub', 'VS Code', 'Figma', 'Postman', 'Unity'],
+    skills: ['Git', 'GitHub', 'VS Code', 'Figma', 'Postman', 'WordPress', 'Unity'],
   },
 ]
