@@ -634,7 +634,7 @@ function HeroContent() {
               <SocialLink label="GitHub" href="https://github.com/HtinLin29" icon={Github} />
               <SocialLink
                 label="LinkedIn"
-                href="https://linkedin.com/in/htinlin29"
+                href="https://linkedin.com/in/hlaung29"
                 icon={Linkedin}
               />
               <SocialLink label="Email" href="mailto:htinlin.a66@rsu.ac.th" icon={Mail} />

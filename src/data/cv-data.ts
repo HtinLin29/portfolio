@@ -5,7 +5,7 @@ export const cvData = {
   phone: '+66 81 329 8405',
   line: 'hlaung29',
   github: 'github.com/HtinLin29',
-  linkedin: 'linkedin.com/in/htinlin29',
+  linkedin: 'linkedin.com/in/hlaung29',
   location: 'Bangkok, Thailand',
   summary:
     'Junior software developer currently studying ICT at Rangsit University Bangkok. Experienced in building and deploying real-world mobile and web applications using Flutter, React, Next.js, and Supabase. Passionate about clean UI and solving real problems through code. Open to software development internship opportunities — on-site or remote.',

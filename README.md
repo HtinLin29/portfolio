@@ -30,7 +30,7 @@ I'm a final-year ICT student at Rangsit University in Bangkok, building mobile a
 ## Contact
 
 - Email: htinlin.a66@rsu.ac.th
-- LinkedIn: [linkedin.com/in/htinlin29](https://linkedin.com/in/htinlin29)
+- LinkedIn: [linkedin.com/in/hlaung29](https://linkedin.com/in/hlaung29)
 - GitHub: [github.com/HtinLin29](https://github.com/HtinLin29)
 
 ---
