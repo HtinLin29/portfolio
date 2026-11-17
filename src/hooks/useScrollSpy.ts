@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 
 const SECTION_IDS = ['home', 'about', 'skills', 'projects', 'cv', 'contact']
 
-export function useScrollSpy(threshold = 0.3) {
+/**
+ * Returns the id of the section crossing the middle of the viewport.
+ * Works for sections of any height (a ratio threshold fails for very tall ones).
+ */
+export function useScrollSpy() {
   const [activeSection, setActiveSection] = useState('home')
 
   useEffect(() => {
@@ -14,24 +18,15 @@ export function useScrollSpy(threshold = 0.3) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
-
-        if (visible.length > 0) {
-          setActiveSection(visible[0].target.id)
-        }
+        const hit = entries.find((entry) => entry.isIntersecting)
+        if (hit) setActiveSection(hit.target.id)
       },
-      {
-        threshold,
-        rootMargin: '-80px 0px -40% 0px',
-      },
+      { rootMargin: '-45% 0px -54% 0px', threshold: 0 },
     )
 
     sections.forEach((section) => observer.observe(section))
-
     return () => observer.disconnect()
-  }, [threshold])
+  }, [])
 
   return activeSection
 }

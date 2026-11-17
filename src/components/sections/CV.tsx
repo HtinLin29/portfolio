@@ -1,259 +1,146 @@
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
-import { Download, Link2, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
-import SectionTitle from '../ui/SectionTitle'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
+import { ArrowUpRight, Download, Eye } from 'lucide-react'
+import { SectionHeading } from '../ui/Bento'
+import { MovingBorder } from '../fx/effects'
 import { cvData } from '../../data/cv-data'
 import { downloadCvPdf } from '../../lib/downloadCv'
-import profilePhoto from '../../assets/profile.png'
+import { openCvViewer } from '../../lib/cvViewer'
 
-const SKILLS = [
-  'Flutter & Dart',
-  'React & Next.js',
-  'Supabase & PostgreSQL',
-  'TypeScript / JavaScript',
-  'Git & Deployment',
-]
+const CV_PREVIEW_URL = `${import.meta.env.BASE_URL}cv-preview.png`
 
-const STRENGTHS = [
-  'Fast independent learner',
-  'End-to-end project ownership',
-  'Clear technical communication',
-  'Problem-solving mindset',
-]
+interface Entry {
+  year: string
+  title: string
+  org: string
+  tag?: string
+  body?: ReactNode
+}
 
-const HOBBIES = ['Exploring new frameworks', 'Game design & Unity', 'Tech & startup content']
-
-const SUMMARY =
-  'Final-year ICT student with hands-on experience designing, building, and independently deploying full-stack mobile and web applications used by real businesses. Comfortable owning a project end-to-end — database schema, backend logic, UI, and production deployment — using Flutter, React, Next.js, and Supabase. Seeking a software development internship in Bangkok or remote.'
-
-const PROJECTS = [
+const ENTRIES: Entry[] = [
   {
-    title: 'Royal Ph7 — Water Delivery App',
-    meta: 'Flutter · Dart · Supabase · GoRouter',
-    bullets: [
-      'Real-time order tracking with Supabase streams and role-based access for customers, drivers, and admins.',
-      'Live chat with unread badges and shift management for delivery operations.',
-    ],
+    year: 'Nov 2026',
+    title: 'Intern',
+    org: 'DiscoverToday International Marketing Pty., Ltd.',
+    tag: 'Completed',
   },
   {
-    title: 'Water Factory — Business Management System',
-    meta: 'Next.js 14 · TypeScript · Supabase · Vercel',
-    bullets: [
-      'Multi-city data isolation with Row Level Security for separate business units.',
-      'Credit sales tracking, stock management, and automated data retention via Vercel cron.',
-    ],
+    year: '2026',
+    title: 'Built & launched Linn Pharmacy',
+    org: 'Independent project · in daily use',
+    body: (
+      <p>
+        Designed, built and deployed a full pharmacy point-of-sale system — 30+ screens, 19 backend services,
+        encrypted backups — that a real pharmacy runs on every day.
+      </p>
+    ),
+  },
+  {
+    year: '2023',
+    title: 'Freelance Web Developer',
+    org: 'ICT for Development Team · Remote · 2023 — Present',
+    body: (
+      <>
+        <ul className="space-y-2">
+          {(cvData.experience.find((e) => e.role === 'Freelance Web Developer')?.points ?? []).map((p) => (
+            <li key={p} className="flex gap-2.5">
+              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#38BDF8]" />
+              {p}
+            </li>
+          ))}
+        </ul>
+        <a
+          href="https://brahmaso.org.mm"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 inline-flex items-center gap-1 text-[13px] font-medium text-[#38BDF8] hover:underline"
+        >
+          brahmaso.org.mm <ArrowUpRight size={14} />
+        </a>
+      </>
+    ),
+  },
+  {
+    year: '2023',
+    title: 'B.Sc. Information & Communication Technology',
+    org: `${cvData.education.university} · Bangkok · 2023 — 2027`,
+    tag: 'Final year',
   },
 ]
 
-function ResumeSectionHeader({ children }: { children: string }) {
+function Timeline() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const innerRef = useRef<HTMLDivElement>(null)
+  const [height, setHeight] = useState(0)
+
+  useLayoutEffect(() => {
+    const measure = () => setHeight(innerRef.current?.getBoundingClientRect().height ?? 0)
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start 15%', 'end 60%'] })
+  const beamHeight = useTransform(scrollYProgress, [0, 1], [0, height])
+  const beamOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1])
+
   return (
-    <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-gray-900">
-      {children}
-    </h3>
-  )
-}
-
-function SquareBulletItem({ children }: { children: string }) {
-  return (
-    <li className="flex items-start gap-2 text-sm text-gray-700">
-      <span className="mt-0.5 h-4 w-4 shrink-0 bg-gray-900" aria-hidden />
-      <span>{children}</span>
-    </li>
-  )
-}
-
-function ContactRow({
-  icon: Icon,
-  children,
-  href,
-}: {
-  icon: typeof MapPin
-  children: string
-  href?: string
-}) {
-  const content = (
-    <>
-      <Icon size={15} className="shrink-0 text-gray-500" strokeWidth={1.75} />
-      <span>{children}</span>
-    </>
-  )
-
-  if (href) {
-    return (
-      <a
-        href={href}
-        target={href.startsWith('http') ? '_blank' : undefined}
-        rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-        className="flex items-center gap-2 text-sm text-gray-700 transition-colors hover:text-gray-900"
-      >
-        {content}
-      </a>
-    )
-  }
-
-  return <div className="flex items-center gap-2 text-sm text-gray-700">{content}</div>
-}
-
-function ResumeCard() {
-  return (
-    <div
-      id="cv-content"
-      className="rounded-2xl border border-gray-200 bg-white p-6 text-gray-900 shadow-sm sm:p-8 md:p-10"
-    >
-      <header className="flex items-start justify-between gap-6">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-widest text-gray-500">
-            Junior Software Developer
-          </p>
-          <h2 className="mt-2 font-serif text-4xl font-bold leading-tight text-gray-900 md:text-5xl">
-            HTIN LIN
-            <br />
-            AUNG
-          </h2>
-        </div>
-        <img
-          src={profilePhoto}
-          alt={cvData.name}
-          className="h-20 w-20 shrink-0 rounded-full border border-gray-200 object-cover md:h-24 md:w-24"
-        />
-      </header>
-
-      <hr className="my-6 border-gray-200" />
-
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_2fr] md:divide-x md:divide-gray-200">
-        <aside className="space-y-8 md:pr-8">
-          <section>
-            <ResumeSectionHeader>Contact</ResumeSectionHeader>
-            <div className="space-y-2">
-              <ContactRow icon={MapPin}>{cvData.location}</ContactRow>
-              <ContactRow icon={Phone} href={`tel:${cvData.phone.replace(/\s/g, '')}`}>
-                {cvData.phone}
-              </ContactRow>
-              <ContactRow icon={MessageCircle}>{`LINE: ${cvData.line}`}</ContactRow>
-              <ContactRow icon={Mail} href={`mailto:${cvData.email}`}>
-                {cvData.email}
-              </ContactRow>
-              <ContactRow icon={Link2} href={`https://${cvData.github}`}>
-                {cvData.github}
-              </ContactRow>
-              <ContactRow icon={Link2} href={`https://${cvData.linkedin}`}>
-                {cvData.linkedin}
-              </ContactRow>
-            </div>
-          </section>
-
-          <section>
-            <ResumeSectionHeader>Skills</ResumeSectionHeader>
-            <ul className="space-y-1.5">
-              {SKILLS.map((skill) => (
-                <SquareBulletItem key={skill}>{skill}</SquareBulletItem>
-              ))}
-            </ul>
-          </section>
-
-          <section>
-            <ResumeSectionHeader>Languages</ResumeSectionHeader>
-            <ul className="space-y-1.5">
-              <SquareBulletItem>English | Professional</SquareBulletItem>
-              <SquareBulletItem>Burmese | Native</SquareBulletItem>
-            </ul>
-          </section>
-
-          <section>
-            <ResumeSectionHeader>Strengths</ResumeSectionHeader>
-            <ul className="space-y-1.5">
-              {STRENGTHS.map((strength) => (
-                <SquareBulletItem key={strength}>{strength}</SquareBulletItem>
-              ))}
-            </ul>
-          </section>
-
-          <section>
-            <ResumeSectionHeader>Hobbies</ResumeSectionHeader>
-            <ul className="space-y-1.5">
-              {HOBBIES.map((hobby) => (
-                <SquareBulletItem key={hobby}>{hobby}</SquareBulletItem>
-              ))}
-            </ul>
-          </section>
-
-          <section>
-            <ResumeSectionHeader>Education</ResumeSectionHeader>
-            <p className="font-semibold text-gray-900">{cvData.education.university}</p>
-            <p className="mt-1 text-sm text-gray-700">
-              B.Sc. Information &amp; Communication Technology
-            </p>
-            <p className="mt-1 text-xs text-gray-500">Final-Year · Bangkok · Expected 2027</p>
-          </section>
-        </aside>
-
-        <div className="space-y-8 md:pl-8">
-          <section>
-            <ResumeSectionHeader>Summary</ResumeSectionHeader>
-            <p className="text-sm leading-relaxed text-gray-700">{SUMMARY}</p>
-          </section>
-
-          <section>
-            <ResumeSectionHeader>Experience</ResumeSectionHeader>
-            {cvData.experience.map((exp) => (
-              <div key={exp.role}>
-                <p className="font-semibold text-gray-900">{exp.role}</p>
-                <p className="mt-0.5 text-xs text-gray-500">
-                  {exp.company} · {exp.type} · {exp.period}
-                </p>
-                <ul className="mt-3 space-y-2">
-                  <li className="flex items-start gap-2 text-sm text-gray-700">
-                    <span className="shrink-0">•</span>
-                    <span>
-                      Designed and built client websites, including a social welfare organization
-                      (brahmaso.org.mm) that is currently live and in active use.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm text-gray-700">
-                    <span className="shrink-0">•</span>
-                    <span>
-                      Managed full project lifecycle independently — requirements through deployment
-                      — for small businesses and non-profits in Myanmar.
-                    </span>
-                  </li>
-                </ul>
+    <div ref={containerRef}>
+      <div ref={innerRef} className="relative pb-6">
+        {ENTRIES.map((e, i) => (
+          <div key={`${e.year}-${e.title}`} className="flex justify-start gap-6 pt-10 md:gap-10 md:pt-24">
+            <div className="sticky top-32 z-30 flex max-w-xs shrink-0 flex-col items-center self-start md:w-full md:flex-row lg:max-w-sm">
+              <div className="absolute left-0 flex h-10 w-10 items-center justify-center rounded-full bg-[#070b17] md:left-0">
+                <div className="h-4 w-4 rounded-full border border-[#38BDF8]/60 bg-[#1A56DB]/50 shadow-[0_0_14px_rgba(56,189,248,0.7)]" />
               </div>
-            ))}
-          </section>
-
-          <section>
-            <ResumeSectionHeader>Projects</ResumeSectionHeader>
-            <div className="space-y-6">
-              {PROJECTS.map((project) => (
-                <div key={project.title}>
-                  <p className="font-semibold text-gray-900">{project.title}</p>
-                  <p className="mt-0.5 text-xs text-gray-500">{project.meta}</p>
-                  <ul className="mt-3 space-y-2">
-                    {project.bullets.map((bullet) => (
-                      <li key={bullet} className="flex items-start gap-2 text-sm text-gray-700">
-                        <span className="shrink-0">•</span>
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+              <h3 className="font-heading hidden text-[40px] font-bold text-slate-600 md:block md:pl-20 lg:text-[48px]">
+                {e.year}
+              </h3>
             </div>
-          </section>
+
+            <motion.div
+              className="relative w-full pl-16 md:pl-0"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '0px 0px -80px 0px' }}
+              transition={{ duration: 0.6, delay: i * 0.05 }}
+            >
+              <h3 className="font-heading mb-3 block text-[28px] font-bold text-slate-600 md:hidden">{e.year}</h3>
+              <div className="bento-card p-6 md:p-7">
+                {e.tag && (
+                  <span className="mb-3 inline-block rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-300">
+                    {e.tag}
+                  </span>
+                )}
+                <p className="font-heading text-[22px] font-bold leading-snug text-white">{e.title}</p>
+                <p className="mt-1 text-[14px] text-[#38BDF8]">{e.org}</p>
+                {e.body && <div className="mt-4 text-[14.5px] leading-relaxed text-slate-300">{e.body}</div>}
+              </div>
+            </motion.div>
+          </div>
+        ))}
+
+        <div
+          className="absolute left-5 top-0 w-[2px] overflow-hidden bg-[linear-gradient(to_bottom,transparent_0%,rgba(255,255,255,0.12)_10%,rgba(255,255,255,0.12)_90%,transparent_100%)] md:left-5"
+          style={{ height }}
+          aria-hidden="true"
+        >
+          <motion.div
+            style={{ height: beamHeight, opacity: beamOpacity }}
+            className="absolute inset-x-0 top-0 w-[2px] rounded-full bg-gradient-to-t from-[#818CF8] via-[#38BDF8] to-transparent"
+          />
         </div>
       </div>
     </div>
   )
 }
 
-function SuccessToast({ show, onHide }: { show: boolean; onHide: () => void }) {
+function Toast({ show, onHide }: { show: boolean; onHide: () => void }) {
   useEffect(() => {
     if (!show) return
-    const timer = setTimeout(onHide, 3000)
-    return () => clearTimeout(timer)
+    const t = setTimeout(onHide, 2500)
+    return () => clearTimeout(t)
   }, [show, onHide])
-
   return (
     <AnimatePresence>
       {show && (
@@ -261,10 +148,9 @@ function SuccessToast({ show, onHide }: { show: boolean; onHide: () => void }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          transition={{ duration: 0.3 }}
-          className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-water-blue/30 bg-theme-card px-5 py-3 text-sm font-medium text-theme-primary shadow-lg"
+          className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-[#38BDF8]/30 bg-[#0d1528] px-5 py-3 text-sm font-medium text-white shadow-lg"
         >
-          CV downloaded successfully!
+          CV downloaded
         </motion.div>
       )}
     </AnimatePresence>
@@ -272,46 +158,72 @@ function SuccessToast({ show, onHide }: { show: boolean; onHide: () => void }) {
 }
 
 export default function CV() {
-  const [showToast, setShowToast] = useState(false)
-
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  })
-
-  const handleDownload = () => {
-    downloadCvPdf()
-    setShowToast(true)
-  }
+  const [toast, setToast] = useState(false)
 
   return (
     <section id="cv" className="section-padding relative z-[1]">
       <div className="section-container">
-        <SectionTitle title="My Resume" subtitle="Download or view my full CV" />
+        <SectionHeading
+          index="04"
+          eyebrow="Resume"
+          title="My journey so"
+          highlight="far."
+          subtitle="Work, projects and education — scroll to follow the timeline."
+        />
+
+        <Timeline />
 
         <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="mx-auto max-w-5xl"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="bento-card mx-auto mt-16 grid max-w-4xl items-center gap-8 p-6 md:grid-cols-[0.8fr_1fr] md:p-8"
         >
-          <ResumeCard />
-
-          <div className="mt-6 flex justify-center">
-            <button
-              type="button"
-              onClick={handleDownload}
-              className="cv-download-btn flex h-[52px] w-full max-w-md items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white transition-all duration-200"
-            >
-              <Download size={18} />
-              Download CV (PDF)
-            </button>
+          <button
+            type="button"
+            onClick={openCvViewer}
+            aria-label="View CV"
+            className="group relative mx-auto block w-full max-w-[300px] -rotate-2 overflow-hidden rounded-xl border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.55)] transition-transform duration-500 hover:rotate-0 hover:scale-[1.03]"
+          >
+            <img src={CV_PREVIEW_URL} alt={`${cvData.name} CV preview`} loading="lazy" width={1588} height={2246} className="w-full" />
+            <span className="absolute inset-0 flex items-center justify-center bg-[#070b17]/0 opacity-0 transition-all duration-300 group-hover:bg-[#070b17]/45 group-hover:opacity-100">
+              <span className="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-[#070b17]">
+                <Eye size={15} /> Read CV
+              </span>
+            </span>
+          </button>
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-slate-500">One-page CV · PDF</p>
+            <p className="font-heading mt-3 text-[30px] font-bold leading-tight text-white">Everything on one page.</p>
+            <p className="mt-3 text-[15px] leading-relaxed text-slate-400">
+              Experience, all four projects, skills and contact details — ready to share with your team.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  downloadCvPdf()
+                  setToast(true)
+                }}
+              >
+                <MovingBorder innerClassName="h-12 gap-2 px-6 text-[15px] font-semibold text-white">
+                  <Download size={17} /> Download CV
+                </MovingBorder>
+              </button>
+              <button
+                type="button"
+                onClick={openCvViewer}
+                className="inline-flex h-12 items-center gap-2 rounded-xl bg-white px-5 text-[15px] font-semibold text-[#070b17] transition-transform hover:scale-[1.03]"
+              >
+                <Eye size={16} /> View CV
+              </button>
+            </div>
           </div>
         </motion.div>
       </div>
 
-      <SuccessToast show={showToast} onHide={() => setShowToast(false)} />
+      <Toast show={toast} onHide={() => setToast(false)} />
     </section>
   )
 }

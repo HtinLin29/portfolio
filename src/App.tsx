@@ -10,6 +10,8 @@ import Projects from './components/sections/Projects'
 import CV from './components/sections/CV'
 import Contact from './components/sections/Contact'
 import GlobalParticles from './components/ui/GlobalParticles'
+import IntroCover from './components/fx/IntroCover'
+import CvViewer from './components/ui/CvViewer'
 import { useTheme } from './hooks/useTheme'
 
 function ScrollProgress() {
@@ -72,15 +74,24 @@ function SectionDivider() {
   return <hr className="section-divider" aria-hidden="true" />
 }
 
+function prefersIntro() {
+  return !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 function AppContent() {
+  const [showIntro, setShowIntro] = useState(prefersIntro)
+  const [heroReady, setHeroReady] = useState(() => !prefersIntro())
+
   return (
     <div className="relative min-h-screen bg-[#0a0f1e]">
+      {showIntro && <IntroCover onReveal={() => setHeroReady(true)} onDone={() => setShowIntro(false)} />}
+      <CvViewer />
       <GlobalParticles />
       <ScrollProgress />
       <CursorGlow />
       <Navbar />
       <main className="relative z-[1] bg-transparent">
-        <Hero />
+        {heroReady ? <Hero /> : <div className="min-h-[100svh]" />}
         <SectionDivider />
         <About />
         <SectionDivider />

@@ -1,402 +1,156 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
 import { Check, ExternalLink, Github } from 'lucide-react'
-import clsx from 'clsx'
-import SectionTitle from '../ui/SectionTitle'
+import { motion } from 'framer-motion'
+import { SectionHeading } from '../ui/Bento'
+import { Card3D, Card3DItem } from '../fx/effects'
 import LinnPharmacyCaseStudy from './LinnPharmacyCaseStudy'
 import { projects, type Project } from '../../data/projects'
 
 const PROJECT_FEATURES: Record<number, string[]> = {
-  1: [
-    'Real-time order tracking with Supabase streams',
-    'Role-based access (Customer, Driver, Admin)',
-    'Live chat with unread message badges',
-  ],
-  2: [
-    'Multi-city data isolation with Row Level Security',
-    'Driver distribution tracking with cash reconciliation',
-    'Automated 3-month data retention with Vercel cron',
-  ],
-  3: [
-    'Subject-organized notes with per-user Supabase RLS',
-    'AI chat grounded in your own material via Gemini API',
-    'Auto-generated quizzes with score history over time',
-  ],
-  4: [
-    'Interactive terminal with custom commands',
-    'EmailJS contact form with real-time validation',
-    'Fully responsive, animated UI with Framer Motion',
-  ],
+  1: ['Real-time order tracking with Supabase streams', 'Customer, driver and admin roles', 'Live chat with unread badges'],
+  2: ['Multi-city data isolation with RLS', 'Driver cash reconciliation', 'Automated data retention via cron'],
+  3: ['AI chat grounded in your own notes', 'Auto-generated quizzes', 'Per-user data isolation with RLS'],
+  4: ['Interactive terminal with commands', 'Bento hero with cursor-lit cards', 'Fully responsive and animated'],
 }
 
-const TECH_TOOLTIPS: Record<string, string> = {
-  Flutter: 'Mobile & Web UI',
-  Dart: 'App Logic & State',
-  Supabase: 'Database & Real-time',
-  GoRouter: 'Navigation',
-  Provider: 'State Management',
-  'Next.js': 'Full-stack Framework',
-  'Next.js 14': 'App Router Framework',
-  TypeScript: 'Type Safety',
-  Vercel: 'Deployment',
-  TailwindCSS: 'Styling System',
-  PostgreSQL: 'Relational Data',
-  React: 'UI Library',
-  'Framer Motion': 'Animations',
-  'Gemini API': 'AI Assistant',
-  'shadcn/ui': 'UI Components',
-}
-
-function TechBadge({ tech }: { tech: string }) {
-  const [hovered, setHovered] = useState(false)
-  const tooltip = TECH_TOOLTIPS[tech]
-
-  return (
-    <span
-      className="relative inline-block"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <span className="project-tech-badge cursor-default">{tech}</span>
-      {hovered && tooltip && (
-        <span className="tech-tooltip absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#1A2035] px-2.5 py-1 text-[11px] text-white shadow-lg">
-          {tooltip}
-        </span>
-      )}
-    </span>
-  )
-}
-
-function LiveBadge() {
-  return (
-    <span className="absolute right-4 top-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/90 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
-      <span className="relative flex h-2 w-2">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
-      </span>
-      Live
-    </span>
-  )
-}
-
-const PREVIEW_PARTICLES = {
-  royal: [
-    { left: '14%', delay: '0s', duration: '9s', color: '#1A56DB' },
-    { left: '32%', delay: '2.1s', duration: '11s', color: '#06B6D4' },
-    { left: '52%', delay: '0.8s', duration: '10s', color: '#1A56DB' },
-    { left: '68%', delay: '3.4s', duration: '12s', color: '#06B6D4' },
-    { left: '82%', delay: '1.6s', duration: '9.5s', color: '#1A56DB' },
-    { left: '24%', delay: '4.2s', duration: '10.5s', color: '#06B6D4' },
-  ],
-  factory: [
-    { left: '16%', delay: '0.4s', duration: '9s', color: '#0891B2' },
-    { left: '36%', delay: '2.3s', duration: '11s', color: '#10B981' },
-    { left: '54%', delay: '1.1s', duration: '10s', color: '#06B6D4' },
-    { left: '72%', delay: '3.8s', duration: '12s', color: '#0891B2' },
-    { left: '86%', delay: '1.9s', duration: '9.5s', color: '#10B981' },
-    { left: '28%', delay: '4.5s', duration: '10.5s', color: '#06B6D4' },
-  ],
-  studymate: [
-    { left: '12%', delay: '0.2s', duration: '9s', color: '#8B5CF6' },
-    { left: '30%', delay: '2.5s', duration: '11s', color: '#6366F1' },
-    { left: '48%', delay: '1.0s', duration: '10s', color: '#06B6D4' },
-    { left: '64%', delay: '3.2s', duration: '12s', color: '#8B5CF6' },
-    { left: '78%', delay: '1.8s', duration: '9.5s', color: '#A78BFA' },
-    { left: '22%', delay: '4.0s', duration: '10.5s', color: '#06B6D4' },
-  ],
-  portfolio: [
-    { left: '12%', delay: '0.2s', duration: '9s', color: '#6366F1' },
-    { left: '30%', delay: '2.5s', duration: '11s', color: '#8B5CF6' },
-    { left: '48%', delay: '1.0s', duration: '10s', color: '#06B6D4' },
-    { left: '64%', delay: '3.2s', duration: '12s', color: '#6366F1' },
-    { left: '78%', delay: '1.8s', duration: '9.5s', color: '#8B5CF6' },
-    { left: '22%', delay: '4.0s', duration: '10.5s', color: '#06B6D4' },
-  ],
-} as const
-
-const PREVIEW_STYLES: Record<
-  number,
-  {
-    panel: string
-    orb: string
-    emoji: string
-    particles: (typeof PREVIEW_PARTICLES)[keyof typeof PREVIEW_PARTICLES]
-  }
-> = {
-  1: {
-    panel: 'project-preview-royal',
-    orb: 'project-preview-orb-royal',
-    emoji: 'project-preview-emoji-royal',
-    particles: PREVIEW_PARTICLES.royal,
-  },
-  2: {
-    panel: 'project-preview-factory',
-    orb: 'project-preview-orb-factory',
-    emoji: 'project-preview-emoji-factory',
-    particles: PREVIEW_PARTICLES.factory,
-  },
-  3: {
-    panel: 'project-preview-studymate',
-    orb: 'project-preview-orb-studymate',
-    emoji: 'project-preview-emoji-studymate',
-    particles: PREVIEW_PARTICLES.studymate,
-  },
-  4: {
-    panel: 'project-preview-portfolio',
-    orb: 'project-preview-orb-portfolio',
-    emoji: 'project-preview-emoji-portfolio',
-    particles: PREVIEW_PARTICLES.portfolio,
-  },
-}
-
-function ProjectPreview({ project }: { project: Project }) {
-  const preview = PREVIEW_STYLES[project.id] ?? PREVIEW_STYLES[2]
-
+function Preview({ project, number }: { project: Project; number: string }) {
   return (
     <div
-      className={clsx(
-        'project-preview-panel relative flex flex-col items-center justify-center overflow-hidden lg:w-[45%]',
-        project.image
-          ? 'min-h-[280px] sm:min-h-[320px] lg:min-h-[380px]'
-          : 'min-h-[400px] px-10 pb-10 pt-6',
-        preview.panel,
-      )}
+      className="relative flex h-[220px] items-center justify-center overflow-hidden sm:h-[240px]"
+      style={{
+        background: `radial-gradient(120% 120% at 0% 0%, ${project.color}55, transparent 55%), radial-gradient(90% 90% at 100% 100%, ${project.color}33, transparent 60%), #0b1122`,
+      }}
     >
-      <div
-        className="project-preview-fine-grid pointer-events-none absolute inset-0"
-        aria-hidden="true"
-      />
-      <div
-        className="project-preview-scanlines pointer-events-none absolute inset-0"
-        aria-hidden="true"
-      />
-      {preview.particles.map((particle, index) => (
-        <span
-          key={index}
-          className="project-preview-particle"
-          style={{
-            left: particle.left,
-            backgroundColor: particle.color,
-            animationDelay: particle.delay,
-            animationDuration: particle.duration,
-          }}
-          aria-hidden="true"
-        />
-      ))}
-
-      <LiveBadge />
-
-      {project.image ? (
-        <div className="absolute inset-0 z-[1] flex items-center justify-center p-5 sm:p-6 lg:p-8">
-          <img
-            src={project.image}
-            alt={`${project.title} preview`}
-            className="max-h-full max-w-full rounded-xl object-contain shadow-[0_12px_40px_rgba(0,0,0,0.45)]"
-            loading="lazy"
-          />
-        </div>
-      ) : (
-        <div className="relative z-[1] flex flex-col items-center">
-          <div className="relative flex items-center justify-center">
-            <div className={clsx('project-preview-orb', preview.orb)} aria-hidden="true" />
-            <span
-              className={clsx('project-emoji-float relative text-[72px] leading-none', preview.emoji)}
-              role="img"
-              aria-hidden="true"
-            >
-              {project.icon}
-            </span>
-          </div>
-          <h3 className="font-heading relative mt-3 text-center text-2xl font-bold text-white">
-            {project.title}
-          </h3>
-          <div className="relative mt-4 flex flex-wrap justify-center gap-2">
-            {project.techStack.slice(0, 3).map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full px-2.5 py-0.5 text-[12px] text-white/70"
-                style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function FeatureCheck() {
-  return (
-    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-water-blue">
-      <Check size={12} className="text-white" strokeWidth={3} />
-    </span>
-  )
-}
-
-function ProjectDetails({ project, index }: { project: Project; index: number }) {
-  const features = PROJECT_FEATURES[project.id] ?? []
-  const projectNumber = String(index + 1).padStart(2, '0')
-
-  return (
-    <div className="relative flex min-h-[400px] flex-col p-8 lg:w-[55%] lg:p-10">
-      <span
-        className="project-number pointer-events-none absolute right-6 top-4 select-none text-[80px] font-bold leading-none"
-        aria-hidden="true"
-      >
-        {projectNumber}
+      <div className="project-preview-fine-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
+      <span className="absolute left-5 top-4 font-heading text-[44px] font-bold leading-none text-white/[0.08]">{number}</span>
+      <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" /> Live
       </span>
 
-      <p className="text-[14px] font-medium uppercase tracking-[0.2em] text-water-cyan">
-        {project.subtitle}
-      </p>
-      <h3 className="font-heading mt-2 text-[36px] font-bold leading-tight text-theme-primary">
-        {project.title}
-      </h3>
-
-      <p className="project-description mt-4 text-[15px] leading-[1.8] text-theme-muted">
-        {project.description}
-      </p>
-
-      <ul className="mt-6 space-y-3">
-        {features.map((feature) => (
-          <li
-            key={feature}
-            className="project-feature flex items-start gap-3 text-[14px] text-theme-muted"
+      {project.image ? (
+        <img
+          src={project.image}
+          alt={`${project.title} screenshot`}
+          loading="lazy"
+          className="relative z-[1] max-h-[78%] max-w-[86%] rounded-lg border border-white/10 object-contain shadow-[0_20px_50px_rgba(0,0,0,0.55)] transition-transform duration-700 group-hover:-rotate-1 group-hover:scale-[1.04]"
+        />
+      ) : (
+        <div className="relative z-[1] flex flex-col items-center">
+          <div
+            className="absolute top-1/2 h-36 w-36 -translate-y-1/2 rounded-full blur-2xl"
+            style={{ background: `${project.color}66` }}
+            aria-hidden="true"
+          />
+          <motion.span
+            className="relative text-[76px] leading-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            aria-hidden="true"
           >
-            <FeatureCheck />
-            {feature}
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-6 flex flex-wrap gap-2">
-        {project.techStack.map((tech) => (
-          <TechBadge key={tech} tech={tech} />
-        ))}
-      </div>
-
-      <div className="mt-auto flex flex-col gap-3 pt-8 sm:flex-row">
-        <a
-          href={project.liveUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="project-btn-live inline-flex h-11 items-center justify-center gap-2 rounded-[10px] px-5 text-sm font-semibold text-white"
-        >
-          Live Demo
-          <ExternalLink size={16} />
-        </a>
-        <a
-          href={project.githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="project-btn-outline inline-flex h-11 items-center justify-center gap-2 rounded-[10px] border-2 border-water-blue px-5 text-sm font-semibold text-water-blue"
-        >
-          View Code
-          <Github size={16} />
-        </a>
-      </div>
+            {project.icon}
+          </motion.span>
+          <p className="font-heading relative mt-3 text-[22px] font-bold text-white">{project.title}</p>
+        </div>
+      )}
     </div>
   )
 }
 
-function FeaturedProjectCard({ project, index }: { project: Project; index: number }) {
-  const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true })
-  const reversed = index % 2 === 1
-
-  return (
-    <motion.article
-      ref={ref}
-      initial={{ opacity: 0, x: reversed ? 80 : -80, scale: 0.95 }}
-      animate={
-        inView
-          ? { opacity: 1, x: 0, scale: 1 }
-          : { opacity: 0, x: reversed ? 80 : -80, scale: 0.95 }
-      }
-      transition={{
-        duration: 0.7,
-        ease: 'easeOut',
-        delay: reversed ? 0.1 : 0,
-      }}
-      className="project-card glass-card group relative min-h-[400px] overflow-hidden rounded-[20px] p-0 shadow-sm"
-    >
-      <div className="project-card-accent absolute bottom-0 left-0 top-0 w-1" aria-hidden="true" />
-
-      <div
-        className={clsx(
-          'flex min-h-[400px] flex-col',
-          reversed ? 'lg:flex-row-reverse' : 'lg:flex-row',
-        )}
-      >
-        <ProjectPreview project={project} />
-        <ProjectDetails project={project} index={index} />
-      </div>
-    </motion.article>
-  )
-}
-
-function MoreComingSoon() {
-  const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true })
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const number = String(index + 2).padStart(2, '0')
+  const features = PROJECT_FEATURES[project.id] ?? []
 
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40, scale: 0.95 }}
-      animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 40, scale: 0.95 }}
-      transition={{ duration: 0.7, delay: 0.1 }}
-      className="project-coming-wrapper mx-auto mt-12 max-w-[800px]"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '0px 0px -60px 0px' }}
+      transition={{ duration: 0.7, delay: (index % 2) * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      className="h-full"
     >
-      <div className="project-coming-border-rotate rounded-[20px] p-[2px]">
-        <div className="project-coming-soon glass-card rounded-[18px] p-12 text-center">
-          <div className="relative mx-auto mb-6 flex h-20 w-20 items-center justify-center">
-            <span className="project-coming-ring absolute inset-0 rounded-full border-2 border-water-blue/30" />
-            <span className="project-coming-spin absolute inset-1 rounded-full border-2 border-transparent border-t-water-cyan border-r-water-blue" />
-            <span
-              className="project-emoji-float text-[48px] leading-none"
-              role="img"
-              aria-hidden="true"
-            >
-              🚀
-            </span>
-          </div>
+      <Card3D className="h-full">
+        <div className="group relative flex h-full flex-col rounded-3xl border border-white/[0.08] bg-[#070b17]/90 p-4 transition-shadow duration-300 hover:shadow-[0_30px_80px_-25px_rgba(26,86,219,0.6)] sm:p-5">
+          <Card3DItem z={80} className="overflow-hidden rounded-2xl">
+            <Preview project={project} number={number} />
+          </Card3DItem>
 
-          <h3 className="text-[20px] font-bold text-theme-primary">More Projects Coming Soon</h3>
-          <p className="mt-2 text-[14px] text-theme-muted">
-            Currently building new projects to add here
-          </p>
+          <div className="flex flex-1 flex-col px-2 pb-2 pt-6">
+            <Card3DItem z={40}>
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#38BDF8]">{project.subtitle}</p>
+              <h3 className="font-heading mt-2 text-[28px] font-bold leading-tight text-white">{project.title}</h3>
+            </Card3DItem>
+            <Card3DItem z={25}>
+              <p className="mt-3 text-[14.5px] leading-relaxed text-slate-400">{project.description}</p>
+            </Card3DItem>
 
-          <div className="mx-auto mt-6 h-1.5 w-64 overflow-hidden rounded-full bg-water-blue/10">
-            <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-water-blue to-water-cyan"
-              initial={{ width: '0%' }}
-              animate={inView ? { width: ['0%', '70%', '45%', '85%'] } : { width: '0%' }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-            />
+            <ul className="mt-5 space-y-2">
+              {features.map((f) => (
+                <li key={f} className="flex items-start gap-2.5 text-[14px] text-slate-300">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#1A56DB]/30 text-[#38BDF8]">
+                    <Check size={12} strokeWidth={3} />
+                  </span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+
+            <ul className="mt-5 flex flex-wrap gap-1.5">
+              {project.techStack.map((t) => (
+                <li key={t} className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 font-mono text-[11px] text-slate-400">
+                  {t}
+                </li>
+              ))}
+            </ul>
+
+            <Card3DItem z={50} className="mt-auto flex gap-3 pt-7">
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-white text-[14px] font-semibold text-[#070b17] transition-transform hover:scale-[1.03] sm:flex-none sm:px-5"
+              >
+                Live demo <ExternalLink size={15} />
+              </a>
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-white/15 text-[14px] font-semibold text-white transition-colors hover:border-[#38BDF8] hover:text-[#38BDF8] sm:flex-none sm:px-5"
+              >
+                Code <Github size={15} />
+              </a>
+            </Card3DItem>
           </div>
         </div>
-      </div>
+      </Card3D>
     </motion.div>
   )
 }
 
 export default function Projects() {
-  const featuredProjects = projects.filter((p) => p.featured)
+  const featured = projects.filter((p) => p.featured)
 
   return (
     <section id="projects" className="section-padding relative z-[1]">
       <div className="section-container">
-        <SectionTitle title="My Projects" subtitle="Things I have built and deployed" />
+        <SectionHeading
+          index="03"
+          eyebrow="Projects"
+          title="Things I've built and"
+          highlight="shipped."
+          subtitle="Real products used by real businesses — starting with the one I'm proudest of."
+        />
 
-        <div className="flex flex-col gap-10">
-          <LinnPharmacyCaseStudy />
-          {featuredProjects.map((project, index) => (
-            <FeaturedProjectCard key={project.id} project={project} index={index} />
+        <LinnPharmacyCaseStudy />
+
+        <p className="mb-6 mt-16 flex items-center gap-3 font-mono text-[12px] uppercase tracking-[0.22em] text-slate-400">
+          <span className="h-px w-10 bg-gradient-to-r from-[#38BDF8] to-transparent" />
+          More shipped projects
+        </p>
+        <div className="grid gap-6 md:grid-cols-2">
+          {featured.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
-
-        <MoreComingSoon />
       </div>
     </section>
   )

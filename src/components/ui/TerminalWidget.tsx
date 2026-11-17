@@ -5,6 +5,7 @@ import clsx from 'clsx'
 import { cvData } from '../../data/cv-data'
 import { projects } from '../../data/projects'
 import { skillCategories } from '../../data/skills'
+import { openCvViewer } from '../../lib/cvViewer'
 
 type LineType = 'command' | 'output' | 'error'
 
@@ -31,6 +32,8 @@ function runCommand(input: string): TerminalLine[] {
         { type: 'output', text: '  whoami    — name and role' },
         { type: 'output', text: '  skills    — tech stack' },
         { type: 'output', text: '  projects  — featured work' },
+        { type: 'output', text: '  experience — where I work' },
+        { type: 'output', text: '  cv        — open my CV' },
         { type: 'output', text: '  contact   — email & LinkedIn' },
         { type: 'output', text: '  clear     — clear terminal' },
         { type: 'output', text: '  hire      — surprise + scroll to contact' },
@@ -50,10 +53,22 @@ function runCommand(input: string): TerminalLine[] {
       ])
 
     case 'projects':
-      return FEATURED_PROJECTS.flatMap((project) => [
+      return [
+        { type: 'output', text: '💊 Linn Pharmacy — Pharmacy POS (in daily use)' },
+        { type: 'output', text: '   https://linnpharmacy.com' },
+      ].concat(FEATURED_PROJECTS.flatMap((project) => [
         { type: 'output', text: `${project.icon} ${project.title} — ${project.subtitle}` },
         { type: 'output', text: `   ${project.liveUrl}` },
+      ])) as TerminalLine[]
+
+    case 'experience':
+      return cvData.experience.flatMap((exp) => [
+        { type: 'output' as const, text: `▸ ${exp.role} — ${exp.company}` },
+        { type: 'output' as const, text: `   ${exp.period} · ${exp.type}` },
       ])
+
+    case 'cv':
+      return [{ type: 'output', text: '📄 Opening my CV…' }]
 
     case 'contact':
       return [
@@ -96,11 +111,16 @@ function fireConfetti() {
 interface TerminalWidgetProps {
   className?: string
   outputClassName?: string
+  /** Show clickable quick-command chips under the prompt. */
+  showChips?: boolean
 }
+
+const QUICK_COMMANDS = ['help', 'projects', 'experience', 'cv', 'hire']
 
 export default function TerminalWidget({
   className = '',
   outputClassName = '',
+  showChips = false,
 }: TerminalWidgetProps) {
   const [lines, setLines] = useState<TerminalLine[]>(
     WELCOME_LINES.map((text) => ({ type: 'output', text })),
@@ -131,6 +151,10 @@ export default function TerminalWidget({
     setHistory((prev) => [...prev, trimmed])
     setHistoryIndex(-1)
     setInput('')
+
+    if (trimmed.toLowerCase() === 'cv') {
+      window.setTimeout(openCvViewer, 300)
+    }
 
     if (trimmed.toLowerCase() === 'hire') {
       fireConfetti()
@@ -236,6 +260,22 @@ export default function TerminalWidget({
             </span>
           </div>
         </div>
+
+        {showChips && (
+          <div className="flex flex-wrap items-center gap-1.5 border-t border-white/10 px-3 py-2.5">
+            <span className="mr-1 font-mono text-[11px] text-slate-500">try:</span>
+            {QUICK_COMMANDS.map((cmd) => (
+              <button
+                key={cmd}
+                type="button"
+                onClick={() => submitCommand(cmd)}
+                className="rounded-md border border-[rgba(6,182,212,0.3)] bg-[rgba(6,182,212,0.08)] px-2 py-0.5 font-mono text-[11px] text-[#67E8F9] transition-colors hover:border-[#06B6D4] hover:bg-[rgba(6,182,212,0.18)]"
+              >
+                {cmd}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

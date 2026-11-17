@@ -1,14 +1,14 @@
 export const cvData = {
   name: 'Htin Lin Aung',
   title: 'Junior Software Developer',
-  email: 'htinlin.a66@rsu.ac.th',
+  email: 'htinlinaung2211@gmail.com',
   phone: '+66 81 329 8405',
   line: 'hlaung29',
   github: 'github.com/HtinLin29',
   linkedin: 'linkedin.com/in/hlaung29',
   location: 'Bangkok, Thailand',
   summary:
-    'Junior software developer currently studying ICT at Rangsit University Bangkok. Experienced in building and deploying real-world mobile and web applications using Flutter, React, Next.js, and Supabase. Passionate about clean UI and solving real problems through code. Open to software development internship opportunities — on-site or remote.',
+    'Junior software developer currently studying ICT at Rangsit University Bangkok. Experienced in building and deploying real-world mobile and web applications using Flutter, React, Next.js, and Supabase. Passionate about clean UI and solving real problems through code. Open to software development roles — on-site or remote.',
   strengths: [
     'Fast learner — picks up new technologies quickly through self-study',
     'Problem solver — breaks down complex requirements into clean solutions',
@@ -19,14 +19,20 @@ export const cvData = {
   ],
   experience: [
     {
+      role: 'Intern',
+      company: 'DiscoverToday International Marketing Pty., Ltd.',
+      period: 'Nov 2026',
+      type: 'Internship',
+      points: ['Completed an internship at DiscoverToday International Marketing Pty., Ltd. (Nov 2026).'],
+    },
+    {
       role: 'Freelance Web Developer',
       company: 'ICT for Development Team',
       period: '2023 — Present',
       type: 'Remote',
       points: [
-        'Collaborated with a team to design and develop websites for real clients including a social welfare organization (brahmaso.org.mm) currently live and in active use',
-        'Contributed to web development projects serving real businesses and non-profit organizations in Myanmar',
-        'Managed full project lifecycle from client requirements through to deployment independently',
+        'Designed and built client websites, including a social welfare organization (brahmaso.org.mm) that is currently live and in active use.',
+        'Managed full project lifecycle independently — requirements through deployment — for small businesses and non-profits in Myanmar.',
       ],
     },
   ],

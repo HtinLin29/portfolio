@@ -1,199 +1,155 @@
+import { ArrowUpRight, Boxes, KeyRound, Layers, Lock, ShieldCheck } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
-import { Boxes, KeyRound, Layers, Lock, ShieldCheck, ExternalLink } from 'lucide-react'
-
-/**
- * Screenshots live in public/projects/linn/. Add entries here once captured
- * (use demo data only — never real customers, prices or staff names).
- */
-const SCREENSHOTS: { src: string; caption: string }[] = []
+import { BentoCard } from '../ui/Bento'
+import { Meteors } from '../fx/effects'
 
 const STATS = [
   { value: '30+', label: 'App screens' },
   { value: '19', label: 'Backend services' },
   { value: 'Nightly', label: 'Encrypted backups' },
-  { value: 'Monthly', label: 'Automated restore test' },
+  { value: 'Monthly', label: 'Restore tests' },
 ]
 
 const CHALLENGES = [
   {
     icon: Boxes,
-    title: 'Selling the oldest stock first, safely',
-    body: 'Every sale deducts from medicine batches in first-expiry-first-out order inside a single database transaction, with row-level locks so two tills can never sell the same last box.',
+    title: 'Oldest stock first, safely',
+    body: 'Sales deduct medicine batches first-expiry-first-out in one transaction, with row locks so two tills never sell the same last box.',
   },
   {
     icon: Layers,
-    title: 'Boxes, strips and tablets',
-    body: 'Pharmacies sell the same item by the box or by the tablet at different prices. Stock is tracked in base units, with unit conversions and price tiers resolved at checkout.',
+    title: 'Boxes, strips & tablets',
+    body: 'One medicine sells by the box or by the tablet at different prices. Stock lives in base units; conversions resolve at checkout.',
   },
   {
     icon: KeyRound,
-    title: 'Permissions that match a real shop',
-    body: 'Per-staff permissions with presets, hidden cost prices, and blind shift close — cashiers count the drawer without seeing the expected total, so discrepancies surface honestly.',
+    title: 'Permissions for a real shop',
+    body: 'Per-staff permissions, hidden cost prices and blind shift close — cashiers count the drawer without seeing the expected total.',
   },
   {
     icon: ShieldCheck,
-    title: 'Running it in production',
-    body: 'Self-hosted behind Cloudflare (Full strict TLS, origin only accepts Cloudflare traffic), nginx + PM2, one-command deploy and rollback, AES-256 encrypted off-site backups, and a monthly job that restores the latest backup to prove it works.',
+    title: 'Running in production',
+    body: 'Self-hosted behind Cloudflare with nginx + PM2, one-command deploy and rollback, and AES-256 encrypted off-site backups.',
   },
 ]
 
-const STACK = ['Next.js', 'TypeScript', 'NestJS', 'TypeORM', 'PostgreSQL', 'JWT Auth', 'nginx', 'Cloudflare', 'Backblaze B2']
+const ARCH = [
+  { name: 'Staff browsers', detail: 'POS tills & back office · Next.js' },
+  { name: 'Cloudflare', detail: 'TLS Full (strict) · origin locked' },
+  { name: 'nginx → NestJS API', detail: 'PM2 · JWT · per-staff permissions' },
+  { name: 'PostgreSQL', detail: 'Transactions + row locks' },
+  { name: 'Backblaze B2', detail: 'Encrypted nightly backups' },
+]
 
-function ArchitectureDiagram() {
-  const box = 'rounded-xl border border-[var(--border)] bg-[var(--bg)]/60 px-4 py-3 text-center'
-  const label = 'text-[13px] font-semibold text-theme-primary'
-  const sub = 'mt-0.5 text-[11px] text-theme-muted'
-  const arrow = 'flex items-center justify-center text-water-cyan text-lg leading-none'
-
-  return (
-    <figure className="flex h-full flex-col justify-center gap-2 p-6 sm:p-8" aria-label="Linn Pharmacy system architecture">
-      <p className="mb-2 text-center text-[11px] font-medium uppercase tracking-[0.2em] text-theme-muted">
-        How it fits together
-      </p>
-      <div className={box}>
-        <p className={label}>Staff · POS tills & back office</p>
-        <p className={sub}>Next.js app — 30+ screens</p>
-      </div>
-      <div className={arrow} aria-hidden="true">↓</div>
-      <div className={box}>
-        <p className={label}>Cloudflare</p>
-        <p className={sub}>TLS (Full strict) · origin locked to Cloudflare IPs</p>
-      </div>
-      <div className={arrow} aria-hidden="true">↓</div>
-      <div className={box}>
-        <p className={label}>nginx → NestJS API (PM2)</p>
-        <p className={sub}>JWT auth · per-staff permissions · 19 services</p>
-      </div>
-      <div className={arrow} aria-hidden="true">↓</div>
-      <div className="grid grid-cols-2 gap-2">
-        <div className={box}>
-          <p className={label}>PostgreSQL</p>
-          <p className={sub}>Transactions + row locks</p>
-        </div>
-        <div className={box}>
-          <p className={label}>Backblaze B2</p>
-          <p className={sub}>Encrypted nightly backups</p>
-        </div>
-      </div>
-    </figure>
-  )
-}
-
-function Screenshots() {
-  if (SCREENSHOTS.length === 0) return null
-  return (
-    <div className="mt-8 grid gap-4 sm:grid-cols-2">
-      {SCREENSHOTS.map((shot) => (
-        <figure key={shot.src} className="overflow-hidden rounded-xl border border-[var(--border)]">
-          <img src={shot.src} alt={shot.caption} loading="lazy" className="w-full" />
-          <figcaption className="px-4 py-2 text-[12px] text-theme-muted">{shot.caption}</figcaption>
-        </figure>
-      ))}
-    </div>
-  )
-}
+const STACK = ['Next.js', 'TypeScript', 'NestJS', 'TypeORM', 'PostgreSQL', 'nginx', 'Cloudflare']
 
 export default function LinnPharmacyCaseStudy() {
-  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true })
-
   return (
-    <motion.article
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{ duration: 0.7, ease: 'easeOut' }}
-      className="project-card glass-card relative overflow-hidden rounded-[20px] p-0"
-      aria-labelledby="linn-title"
-    >
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-water-cyan to-water-blue" aria-hidden="true" />
-
-      <div className="flex flex-col lg:flex-row">
-        <div className="p-8 lg:w-[58%] lg:p-10">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-emerald-400">
-              Featured case study
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] px-3 py-1 text-[11px] text-theme-muted">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
-              In production
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] px-3 py-1 text-[11px] text-theme-muted">
-              <Lock size={11} aria-hidden="true" />
-              Private codebase
-            </span>
-          </div>
-
-          <p className="mt-6 text-[14px] font-medium uppercase tracking-[0.2em] text-water-cyan">
-            Pharmacy Point-of-Sale & Inventory System
-          </p>
-          <h3 id="linn-title" className="font-heading mt-2 text-[36px] font-bold leading-tight text-theme-primary md:text-[44px]">
-            Linn Pharmacy
-          </h3>
-
-          <p className="mt-4 text-[15px] leading-[1.8] text-theme-muted">
-            A pharmacy in Myanmar needed to stop selling expired medicine, know what to reorder, and
-            close every shift with the cash adding up. I designed, built, deployed and now operate
-            the whole system myself — from the database schema to the server it runs on.
-          </p>
-
-          <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {STATS.map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-[var(--border)] px-3 py-3">
-                <dt className="text-[11px] text-theme-muted">{stat.label}</dt>
-                <dd className="mt-1 text-[20px] font-bold text-theme-primary">{stat.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-
-        <div className="border-t border-[var(--border)] lg:w-[42%] lg:border-l lg:border-t-0">
-          <ArchitectureDiagram />
-        </div>
-      </div>
-
-      <div className="border-t border-[var(--border)] p-8 lg:p-10">
-        <h4 className="text-[13px] font-semibold uppercase tracking-[0.2em] text-theme-muted">
-          Hard problems I solved
-        </h4>
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
-          {CHALLENGES.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="rounded-xl border border-[var(--border)] p-5">
-              <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-water-blue/15 text-water-cyan">
-                  <Icon size={18} aria-hidden="true" />
-                </span>
-                <p className="text-[15px] font-semibold text-theme-primary">{title}</p>
-              </div>
-              <p className="mt-3 text-[14px] leading-[1.7] text-theme-muted">{body}</p>
-            </div>
-          ))}
-        </div>
-
-        <Screenshots />
-
-        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap gap-2">
-            {STACK.map((tech) => (
-              <span key={tech} className="project-tech-badge">
-                {tech}
+    <div className="grid gap-4 lg:grid-cols-12">
+      <BentoCard index={0} className="relative p-7 sm:p-10 lg:col-span-12">
+        <Meteors count={22} />
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(16,185,129,0.22),transparent_65%)] blur-2xl"
+          aria-hidden="true"
+        />
+        <div className="relative grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-end">
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-gradient-to-r from-emerald-400 to-[#38BDF8] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#04111f]">
+                Featured case study
               </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold text-emerald-300">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" /> In daily use
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-[11px] text-slate-400">
+                <Lock size={11} /> Private code
+              </span>
+            </div>
+            <p className="mt-7 font-mono text-[12px] text-slate-500">01 — Pharmacy POS & inventory · 2026</p>
+            <h3 className="font-heading mt-2 text-[48px] font-bold leading-[0.95] tracking-[-0.04em] text-white md:text-[80px]">
+              💊 Linn <span className="text-shimmer">Pharmacy</span>
+            </h3>
+            <p className="mt-5 max-w-2xl text-[17px] leading-relaxed text-slate-300">
+              A pharmacy in Myanmar needed to stop selling expired medicine, know what to reorder, and close every
+              shift with the cash adding up. I designed, built and deployed the whole system — and I run it.
+            </p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {STACK.map((t) => (
+                <li key={t} className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 font-mono text-[12px] text-slate-300">
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            {STATS.map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + i * 0.08 }}
+                className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5"
+              >
+                <p className="font-heading text-shimmer text-[34px] font-bold leading-none">{s.value}</p>
+                <p className="mt-2 text-[12px] text-slate-400">{s.label}</p>
+              </motion.div>
             ))}
           </div>
-          <a
-            href="https://linnpharmacy.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex shrink-0 items-center gap-1.5 text-[13px] text-theme-muted hover:text-water-cyan"
-          >
-            linnpharmacy.com · staff only
-            <ExternalLink size={13} aria-hidden="true" />
-          </a>
         </div>
-        <p className="mt-3 text-[12px] text-theme-muted">
-          Code is private because it runs a live business — happy to walk through it in an interview.
-        </p>
+      </BentoCard>
+
+      <BentoCard index={1} className="flex flex-col p-7 lg:col-span-5">
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-slate-500">How it fits together</p>
+        <ol className="relative mt-6 flex flex-1 flex-col justify-between gap-4">
+          <span className="absolute bottom-4 left-[17px] top-4 w-px overflow-hidden bg-white/10" aria-hidden="true">
+            <span className="arch-flow absolute left-0 h-16 w-px bg-gradient-to-b from-transparent via-[#38BDF8] to-transparent" />
+          </span>
+          {ARCH.map((node, i) => (
+            <motion.li
+              key={node.name}
+              className="relative flex items-center gap-4"
+              initial={{ opacity: 0, x: 16 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.15 + i * 0.1 }}
+            >
+              <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#38BDF8]/40 bg-[#0a0f1e] font-mono text-[12px] text-[#38BDF8] shadow-[0_0_18px_rgba(56,189,248,0.3)]">
+                {i + 1}
+              </span>
+              <div>
+                <p className="text-[15px] font-semibold text-white">{node.name}</p>
+                <p className="text-[13px] text-slate-400">{node.detail}</p>
+              </div>
+            </motion.li>
+          ))}
+        </ol>
+      </BentoCard>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:col-span-7">
+        {CHALLENGES.map(({ icon: Icon, title, body }, i) => (
+          <BentoCard key={title} index={i + 2} className="group p-6">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-[rgba(56,189,248,0.2)] bg-gradient-to-br from-emerald-400/20 to-[#1A56DB]/20 text-emerald-300 transition-transform duration-500 group-hover:rotate-[-8deg] group-hover:scale-110">
+              <Icon size={20} />
+            </span>
+            <p className="mt-5 text-[16px] font-semibold text-white">{title}</p>
+            <p className="mt-2 text-[13.5px] leading-relaxed text-slate-400">{body}</p>
+          </BentoCard>
+        ))}
       </div>
-    </motion.article>
+
+      <p className="flex flex-wrap items-center gap-x-2 text-[13px] text-slate-500 lg:col-span-12">
+        Code is private because it runs a live business — happy to walk through it in an interview.
+        <a
+          href="https://linnpharmacy.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-0.5 text-[#38BDF8] hover:underline"
+        >
+          linnpharmacy.com <ArrowUpRight size={13} />
+        </a>
+      </p>
+    </div>
   )
 }
