@@ -103,13 +103,25 @@
       }
       .contact li {
         list-style: none;
+        margin-bottom: 2mm;
+        font-size: 8.4pt;
+        word-break: break-all;
+      }
+      .contact a {
         display: flex;
         align-items: center;
         gap: 2.5mm;
-        margin-bottom: 2mm;
-        font-size: 8.4pt;
         color: #e2e8f0;
-        word-break: break-all;
+        text-decoration: none;
+      }
+      .entry-title a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .entry-title a::after {
+        content: ' ↗';
+        font-size: 7.5pt;
+        color: var(--blue);
       }
       .contact svg {
         width: 3.4mm;
@@ -311,32 +323,25 @@
           <h2>Contact</h2>
           <ul class="contact">
             <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3z" /><path d="m3 7 9 6 9-6" /></svg>
-              htinlinaung2211@gmail.com
+              <a href="mailto:htinlinaung2211@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3z" /><path d="m3 7 9 6 9-6" /></svg>htinlinaung2211@gmail.com</a>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" /></svg>
-              +66 81 329 8405
+              <a href="tel:+66813298405"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" /></svg>+66 81 329 8405</a>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l1.3-3.9A9 8 0 1 1 7.7 19L3 20" /></svg>
-              LINE: hlaung29
+              <a href="https://line.me/ti/p/~hlaung29"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l1.3-3.9A9 8 0 1 1 7.7 19L3 20" /></svg>LINE: hlaung29</a>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
-              Bangkok, Thailand
+              <a href="https://maps.google.com/?q=Bangkok,+Thailand"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.5" /></svg>Bangkok, Thailand</a>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg>
-              github.com/HtinLin29
+              <a href="https://github.com/HtinLin29"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg>github.com/HtinLin29</a>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0" /></svg>
-              linkedin.com/in/hlaung29
+              <a href="https://www.linkedin.com/in/hlaung29/"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0" /></svg>linkedin.com/in/hlaung29</a>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M3.6 9h16.8M3.6 15h16.8M11.5 3a17 17 0 0 0 0 18M12.5 3a17 17 0 0 1 0 18" /></svg>
-              htinlin29.github.io/portfolio
+              <a href="https://htinlin29.github.io/portfolio/"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M3.6 9h16.8M3.6 15h16.8M11.5 3a17 17 0 0 0 0 18M12.5 3a17 17 0 0 1 0 18" /></svg>htinlin29.github.io/portfolio</a>
             </li>
           </ul>
         </section>
@@ -427,7 +432,7 @@
         <h2>Projects</h2>
         <div class="entry">
           <div class="entry-head">
-            <p class="entry-title">Linn Pharmacy <em>— Pharmacy POS &amp; Inventory</em><span class="tag">In daily use</span></p>
+            <p class="entry-title"><a href="https://linnpharmacy.com">Linn Pharmacy</a> <em>— Pharmacy POS &amp; Inventory</em><span class="tag">In daily use</span></p>
             <span class="entry-date">2026</span>
           </div>
           <p class="entry-meta">Next.js · NestJS · TypeORM · PostgreSQL · nginx · Cloudflare · <a href="https://linnpharmacy.com">linnpharmacy.com</a></p>
@@ -438,7 +443,7 @@
         </div>
         <div class="entry">
           <div class="entry-head">
-            <p class="entry-title">Water Factory <em>— Business Management System</em><span class="tag">Live</span></p>
+            <p class="entry-title"><a href="https://water-factory-sigma.vercel.app">Water Factory</a> <em>— Business Management System</em><span class="tag">Live</span></p>
             <span class="entry-date">2026</span>
           </div>
           <p class="entry-meta">Next.js · TypeScript · Supabase · Vercel</p>
@@ -448,7 +453,7 @@
         </div>
         <div class="entry">
           <div class="entry-head">
-            <p class="entry-title">Royal Ph7 <em>— Water Delivery App</em><span class="tag">Live</span></p>
+            <p class="entry-title"><a href="https://htinlin29.github.io/RoyalPH7_water_order_app/">Royal Ph7</a> <em>— Water Delivery App</em><span class="tag">Live</span></p>
             <span class="entry-date">2026</span>
           </div>
           <p class="entry-meta">Flutter · Dart · Supabase · GoRouter</p>
@@ -458,7 +463,7 @@
         </div>
         <div class="entry">
           <div class="entry-head">
-            <p class="entry-title">StudyMate AI <em>— AI Study Companion</em><span class="tag">Live</span></p>
+            <p class="entry-title"><a href="https://study-mate-ai-five.vercel.app">StudyMate AI</a> <em>— AI Study Companion</em><span class="tag">Live</span></p>
             <span class="entry-date">2026</span>
           </div>
           <p class="entry-meta">Next.js · TypeScript · Supabase · Gemini API</p>
@@ -468,5 +473,31 @@
         </div>
       </main>
     </div>
+    <script>
+      // Used by cv/build.mjs: with #links, append each link's position (as a
+      // fraction of the A4 page) so the website's CV viewer can make it clickable.
+      if (location.hash === '#links') {
+        document.fonts.ready.then(() => {
+          const page = document.querySelector('.page').getBoundingClientRect()
+          // One area per line box, so a link that wraps doesn't cover the text around it.
+          const links = [...document.querySelectorAll('a[href]')].flatMap((a) =>
+            [...a.getClientRects()]
+              .filter((r) => r.width > 2 && r.height > 2)
+              .map((r) => ({
+                href: a.getAttribute('href'),
+                label: a.textContent.replace(/\s+/g, ' ').trim(),
+                x: +((r.left - page.left) / page.width).toFixed(4),
+                y: +((r.top - page.top) / page.height).toFixed(4),
+                w: +(r.width / page.width).toFixed(4),
+                h: +(r.height / page.height).toFixed(4),
+              })),
+          )
+          const pre = document.createElement('pre')
+          pre.id = 'cv-links'
+          pre.textContent = JSON.stringify(links)
+          document.body.appendChild(pre)
+        })
+      }
+    </script>
   </body>
 </html>

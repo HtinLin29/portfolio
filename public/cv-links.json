@@ -1,0 +1,106 @@
+[
+  {
+    "href": "mailto:htinlinaung2211@gmail.com",
+    "label": "htinlinaung2211@gmail.com",
+    "x": 0.0381,
+    "y": 0.2214,
+    "w": 0.2524,
+    "h": 0.015
+  },
+  {
+    "href": "tel:+66813298405",
+    "label": "+66 81 329 8405",
+    "x": 0.0381,
+    "y": 0.2431,
+    "w": 0.2524,
+    "h": 0.015
+  },
+  {
+    "href": "https://line.me/ti/p/~hlaung29",
+    "label": "LINE: hlaung29",
+    "x": 0.0381,
+    "y": 0.2648,
+    "w": 0.2524,
+    "h": 0.015
+  },
+  {
+    "href": "https://maps.google.com/?q=Bangkok,+Thailand",
+    "label": "Bangkok, Thailand",
+    "x": 0.0381,
+    "y": 0.2865,
+    "w": 0.2524,
+    "h": 0.015
+  },
+  {
+    "href": "https://github.com/HtinLin29",
+    "label": "github.com/HtinLin29",
+    "x": 0.0381,
+    "y": 0.3081,
+    "w": 0.2524,
+    "h": 0.015
+  },
+  {
+    "href": "https://www.linkedin.com/in/hlaung29/",
+    "label": "linkedin.com/in/hlaung29",
+    "x": 0.0381,
+    "y": 0.3298,
+    "w": 0.2524,
+    "h": 0.015
+  },
+  {
+    "href": "https://htinlin29.github.io/portfolio/",
+    "label": "htinlin29.github.io/portfolio",
+    "x": 0.0381,
+    "y": 0.3515,
+    "w": 0.2524,
+    "h": 0.015
+  },
+  {
+    "href": "https://brahmaso.org.mm",
+    "label": "brahmaso.org.mm",
+    "x": 0.3961,
+    "y": 0.4947,
+    "w": 0.133,
+    "h": 0.0134
+  },
+  {
+    "href": "https://linnpharmacy.com",
+    "label": "Linn Pharmacy",
+    "x": 0.3714,
+    "y": 0.5938,
+    "w": 0.134,
+    "h": 0.0143
+  },
+  {
+    "href": "https://linnpharmacy.com",
+    "label": "linnpharmacy.com",
+    "x": 0.7777,
+    "y": 0.6141,
+    "w": 0.1193,
+    "h": 0.0125
+  },
+  {
+    "href": "https://water-factory-sigma.vercel.app",
+    "label": "Water Factory",
+    "x": 0.3714,
+    "y": 0.7138,
+    "w": 0.1279,
+    "h": 0.0143
+  },
+  {
+    "href": "https://htinlin29.github.io/RoyalPH7_water_order_app/",
+    "label": "Royal Ph7",
+    "x": 0.3714,
+    "y": 0.7982,
+    "w": 0.0924,
+    "h": 0.0143
+  },
+  {
+    "href": "https://study-mate-ai-five.vercel.app",
+    "label": "StudyMate AI",
+    "x": 0.3714,
+    "y": 0.8827,
+    "w": 0.1234,
+    "h": 0.0143
+  }
+]

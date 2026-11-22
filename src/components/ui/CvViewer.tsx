@@ -6,13 +6,34 @@ import { onOpenCvViewer } from '../../lib/cvViewer'
 import { cvData } from '../../data/cv-data'
 
 const CV_IMAGE_URL = `${import.meta.env.BASE_URL}cv-preview.png`
+const CV_LINKS_URL = `${import.meta.env.BASE_URL}cv-links.json`
 const ZOOMS = [100, 140, 180, 220]
+
+interface CvLink {
+  href: string
+  label: string
+  /** Position and size as fractions of the CV page. */
+  x: number
+  y: number
+  w: number
+  h: number
+}
 
 /** Full-screen, readable CV viewer. Opens via openCvViewer(); no download needed. */
 export default function CvViewer() {
   const [open, setOpen] = useState(false)
   const [zoom, setZoom] = useState(0)
+  const [links, setLinks] = useState<CvLink[]>([])
   const closeRef = useRef<HTMLButtonElement>(null)
+
+  // Load link positions the first time the viewer opens.
+  useEffect(() => {
+    if (!open || links.length) return
+    fetch(CV_LINKS_URL)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: CvLink[]) => setLinks(Array.isArray(data) ? data : []))
+      .catch(() => setLinks([]))
+  }, [open, links.length])
 
   useEffect(
     () =>
@@ -91,17 +112,39 @@ export default function CvViewer() {
           </div>
 
           <div className="flex-1 overflow-auto px-2 py-4 sm:px-6 sm:py-10">
-            <motion.img
-              src={CV_IMAGE_URL}
-              alt={`${cvData.name} CV`}
+            <motion.div
               onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, y: 40, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30 }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="mx-auto block rounded-lg shadow-[0_30px_90px_rgba(0,0,0,0.6)] transition-[width,max-width] duration-300"
+              className="relative mx-auto transition-[width,max-width] duration-300"
               style={{ width: `${ZOOMS[zoom]}%`, maxWidth: `${(ZOOMS[zoom] / 100) * 880}px` }}
-            />
+            >
+              <img
+                src={CV_IMAGE_URL}
+                alt={`${cvData.name} CV`}
+                className="block w-full rounded-lg shadow-[0_30px_90px_rgba(0,0,0,0.6)]"
+              />
+              {/* Clickable areas over the links printed in the CV (positions from cv/build.mjs). */}
+              {links.map((l) => (
+                <a
+                  key={`${l.href}-${l.x}-${l.y}`}
+                  href={l.href}
+                  target={l.href.startsWith('http') ? '_blank' : undefined}
+                  rel="noopener noreferrer"
+                  aria-label={l.label}
+                  title={l.label}
+                  className="absolute rounded-[3px] outline-none ring-[#38BDF8] transition-colors hover:bg-[#38BDF8]/20 hover:ring-1 focus-visible:bg-[#38BDF8]/20 focus-visible:ring-2"
+                  style={{
+                    left: `${(l.x - 0.003) * 100}%`,
+                    top: `${(l.y - 0.001) * 100}%`,
+                    width: `${(l.w + 0.006) * 100}%`,
+                    height: `${(l.h + 0.002) * 100}%`,
+                  }}
+                />
+              ))}
+            </motion.div>
           </div>
         </motion.div>
       )}

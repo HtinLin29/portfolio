@@ -2,7 +2,7 @@
 //   node cv/build.mjs
 // Set CHROME_PATH if Chrome isn't in the default Windows location.
 import { execFileSync } from 'node:child_process'
-import { existsSync } from 'node:fs'
+import { existsSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
@@ -34,3 +34,16 @@ execFileSync(
   { stdio: 'ignore' },
 )
 console.log('Preview →', png)
+
+// Link positions (as fractions of the page) so the site's CV viewer can make
+// the preview image clickable. resume.html reports them when loaded with #links.
+const dom = execFileSync(chrome, [...common, '--window-size=794,1123', '--dump-dom', `${source}#links`], {
+  encoding: 'utf8',
+  maxBuffer: 20 * 1024 * 1024,
+})
+const match = dom.match(/<pre id="cv-links">([\s\S]*?)<\/pre>/)
+if (!match) throw new Error('Could not read link positions from resume.html')
+const json = match[1].replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&')
+const links = join(root, 'public', 'cv-links.json')
+writeFileSync(links, JSON.stringify(JSON.parse(json), null, 2) + '\n')
+console.log('Links   →', links, `(${JSON.parse(json).length})`)
